@@ -14,6 +14,7 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
     int guesses[][];
     JButton b[][];
     JButton resultado;
+    JButton moisitin;
     int[][] mines;
     boolean allmines;
     int n = 30;
