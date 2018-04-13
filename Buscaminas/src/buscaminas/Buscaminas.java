@@ -15,13 +15,14 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
     JButton b[][];
     int[][] mines;
     boolean allmines;
-    int n = 30;
-    int m = 30;
+    int n ;
+    int m ;
     int deltax[] = {-1, 0, 1, -1, 1, -1, 0, 1};
     int deltay[] = {-1, -1, -1, 0, 0, 1, 1, 1};
     double starttime;
     double endtime;
     public Buscaminas(){
+        
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         perm = new int[n][m];
         boolean allmines = false;
