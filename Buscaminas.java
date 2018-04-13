@@ -1,5 +1,4 @@
 package Buscaminas;
-//PRUEBAdfhdsfhfdsh
 
 import java.awt.*;
 import java.awt.event.*;
