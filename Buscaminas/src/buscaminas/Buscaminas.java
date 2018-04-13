@@ -3,7 +3,7 @@ package Buscaminas;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-
+//SOY PAULA Y QUIERO RPOBAR ESTO
 public class Buscaminas extends JFrame implements ActionListener, MouseListener{
     int nomines = 80;
     int perm[][];
