@@ -5,7 +5,12 @@ import java.awt.event.*;
  //holllaaa
 import javax.swing.*;
 public class Buscaminas extends JFrame implements ActionListener, MouseListener{
+<<<<<<< HEAD
    
+=======
+
+    //Moimoimoi
+>>>>>>> 76fed9e39303bfe829635f0c46574a7d28ee2249
     int nomines = 80;
     int perm[][];
     String tmp;
