@@ -2,15 +2,9 @@ package Buscaminas;
 
 import java.awt.*;
 import java.awt.event.*;
- //holllaaa
 import javax.swing.*;
-public class Buscaminas extends JFrame implements ActionListener, MouseListener{
-<<<<<<< HEAD
-   
-=======
 
-    //Moimoimoi
->>>>>>> 76fed9e39303bfe829635f0c46574a7d28ee2249
+public class Buscaminas extends JFrame implements ActionListener, MouseListener{
     int nomines = 80;
     int perm[][];
     String tmp;
@@ -19,8 +13,6 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
     int column;
     int guesses[][];
     JButton b[][];
-    JButton resultado;
-    JButton moisitin;
     int[][] mines;
     boolean allmines;
     int n = 30;
