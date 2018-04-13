@@ -2,6 +2,8 @@ package Buscaminas;
 
 import java.awt.*;
 import java.awt.event.*;
+
+//pruebajejeje
  
 import javax.swing.*;
 public class Buscaminas extends JFrame implements ActionListener, MouseListener{
