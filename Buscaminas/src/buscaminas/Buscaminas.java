@@ -2,7 +2,7 @@ package Buscaminas;
 
 import java.awt.*;
 import java.awt.event.*;
- //hola
+ 
 import javax.swing.*;
 public class Buscaminas extends JFrame implements ActionListener, MouseListener{
     System.out.println('se lia');
