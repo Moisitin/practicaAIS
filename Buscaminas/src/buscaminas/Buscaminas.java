@@ -1,4 +1,4 @@
-package Buscaminas;
+package buscaminas;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -15,21 +15,22 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
     JButton b[][];
     int[][] mines;
     boolean allmines;
-    int n ;
-    int m ;
+    int n=30;
+    int m=30 ;
     int deltax[] = {-1, 0, 1, -1, 1, -1, 0, 1};
     int deltay[] = {-1, -1, -1, 0, 0, 1, 1, 1};
     double starttime;
     double endtime;
+    JFrame frame;
     public Buscaminas(){
-        
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        frame=new JFrame();
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         perm = new int[n][m];
         boolean allmines = false;
         guesses = new int [n+2][m+2];
         mines = new int[n+2][m+2];
         b = new JButton [n][m];
-        setLayout(new GridLayout(n,m));
+        frame.setLayout(new GridLayout(n,m));
         for (int y = 0;y<m+2;y++){
             mines[0][y] = 3;
             mines[n+1][y] = 3;
@@ -72,18 +73,19 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                 b[x][y] = new JButton("?");
                 b[x][y].addActionListener(this);
                 b[x][y].addMouseListener(this);
-                add(b[x][y]);
+                frame.add(b[x][y]);
                 b[x][y].setEnabled(true);
             }//end inner for
         }//end for
-        pack();
-        setVisible(true);
+        frame.pack();
+        frame.setVisible(true);
         for (int y = 0;y<m+2;y++){
             for (int x = 0;x<n+2;x++){
                 System.out.print(mines[x][y]);
             }
         System.out.println("");}
         starttime = System.nanoTime();
+        //Crearse un menu bar, y en cada uno de los actions hacer un actionlistener que llame al subprograma que te ejecute lo que quieres
     }//end constructor Mine()
  
     public void actionPerformed(ActionEvent e){
