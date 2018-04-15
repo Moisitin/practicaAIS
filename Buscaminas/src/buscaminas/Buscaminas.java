@@ -4,8 +4,8 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class Buscaminas extends JFrame implements ActionListener, MouseListener{
-    int nomines = 80;
+public class Buscaminas extends javax.swing.JFrame{ //extends JFrame implements ActionListener, MouseListener{
+    int nomines;
     int perm[][];
     String tmp;
     boolean found = false;
@@ -15,16 +15,39 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
     JButton b[][];
     int[][] mines;
     boolean allmines;
-    int n=30;
-    int m=30 ;
+    int n;
+    int m;
     int deltax[] = {-1, 0, 1, -1, 1, -1, 0, 1};
     int deltay[] = {-1, -1, -1, 0, 0, 1, 1, 1};
     double starttime;
     double endtime;
     JFrame frame;
-    public Buscaminas(){
+    JMenuBar menuBar;
+    JMenu uses;
+    JMenuItem reiniciar;
+    public Buscaminas(int n, int m, int nomines){
+        this.n=n;
+        this.m=m;
+        this.nomines=nomines;
         frame=new JFrame();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        menuBar = new JMenuBar();
+        frame.add(menuBar);
+        uses= new JMenu ("Uses");
+        menuBar.add(uses);
+        reiniciar= new JMenuItem("reset");
+        uses.add(reiniciar);
+        reiniciar.addActionListener(new ActionListener() {
+            public void actionPerformed (ActionEvent e){
+                frame.dispose();
+                new Buscaminas(n,m,nomines);
+            }
+        });
+        
+        //menuBar.add(this);
+                                        
+        
+        
         perm = new int[n][m];
         boolean allmines = false;
         guesses = new int [n+2][m+2];
@@ -170,9 +193,9 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
  
     }
  
-    public static void main(String[] args){
-        new Buscaminas();
-    }
+    //public static void main(String[] args){
+        //new Buscaminas (n,m,nomines);
+    //}
  
     public void mouseClicked(MouseEvent e) {
  
@@ -220,4 +243,10 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
     public void mouseReleased(MouseEvent arg0) {
         // TODO Auto-generated method stub
     }
+
+    
+
+    //private MenuListener thisMenuListener() {
+       // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    //}
 }//end class
