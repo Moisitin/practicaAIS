@@ -4,8 +4,12 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class Buscaminas extends javax.swing.JFrame{ //extends JFrame implements ActionListener, MouseListener{
-    int nomines;
+
+
+
+public class Buscaminas extends JFrame implements ActionListener, MouseListener{
+    int nomines ; //numero minas
+
     int perm[][];
     String tmp;
     boolean found = false;
@@ -13,6 +17,7 @@ public class Buscaminas extends javax.swing.JFrame{ //extends JFrame implements 
     int column;
     int guesses[][];
     JButton b[][];
+    JButton reinicio;
     int[][] mines;
     boolean allmines;
     int n;
@@ -53,7 +58,7 @@ public class Buscaminas extends javax.swing.JFrame{ //extends JFrame implements 
         guesses = new int [n+2][m+2];
         mines = new int[n+2][m+2];
         b = new JButton [n][m];
-        frame.setLayout(new GridLayout(n,m));
+
         for (int y = 0;y<m+2;y++){
             mines[0][y] = 3;
             mines[n+1][y] = 3;
@@ -132,7 +137,7 @@ public class Buscaminas extends javax.swing.JFrame{ //extends JFrame implements 
                 JOptionPane.showMessageDialog(temporaryLostComponent, "You set off a Mine!!!!.");
                 System.exit(0);
         } else {
-            tmp = Integer.toString(perm[row][column]);
+            tmp = Integer.toString(perm[row][column]); //tocas una y se expanden muchas
             if (perm[row][column] == 0){
                     tmp = " ";
             }
@@ -147,7 +152,7 @@ public class Buscaminas extends javax.swing.JFrame{ //extends JFrame implements 
     }
  
     public void checkifend(){
-        int check= 0;
+        int check= 0; //numero de minas que has marcado
         for (int y = 0; y<m;y++){
             for (int x = 0;x<n;x++){
         if (b[x][y].isEnabled()){
