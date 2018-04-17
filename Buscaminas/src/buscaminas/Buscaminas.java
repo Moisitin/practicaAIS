@@ -22,29 +22,49 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
     double starttime;
     double endtime;
     JFrame frame;
-    JMenuBar menuBar;
-    JMenu options;
-    JMenuItem reiniciar;
+    //JMenuBar menuBar;
+    //JMenu options;
+    JButton reiniciar;
+    JPanel opciones;
+    JPanel juego;
     public Buscaminas(int n, int m, int nomines){
-        frame= new JFrame();
-        
         this.n=n;
         this.m=m;
         this.nomines=nomines;
-        frame.setLayout(new GridLayout(n,m));
-        menuBar = new JMenuBar();
         
-        frame.add(menuBar);
-        options= new JMenu ("Options");
-        menuBar.add(options);
-        reiniciar= new JMenuItem("reset");
-        options.add(reiniciar);
-        reiniciar.addActionListener(new ActionListener() {
+        frame= new JFrame();
+        juego.setLayout(new GridLayout(n,m));
+        
+        opciones = new JPanel();
+        juego = new JPanel();
+        frame.getContentPane().add(opciones);
+        frame.getContentPane().add(juego);
+        juego.setLayout(new GridLayout(n,m));
+
+        reiniciar = new JButton();
+        reiniciar.setBackground(new java.awt.Color(255, 51, 51));
+        reiniciar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        reiniciar.setForeground(new java.awt.Color(255, 255, 255));
+        reiniciar.setText("Reiniciar");
+        reiniciar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Buscaminas.main(null);
+            }
+        });
+        opciones.add(reiniciar);
+        //menuBar = new JMenuBar();
+        
+        //frame.add(menuBar);
+        //options= new JMenu ("Options");
+        //menuBar.add(options);
+        //reiniciar= new JMenuItem("reset");
+        //options.add(reiniciar);
+        /*reiniciar.addActionListener(new ActionListener() {
             public void actionPerformed (ActionEvent e){
                 dispose();
                 new Buscaminas(n,m,nomines);
             }
-        });
+        });*/
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         perm = new int[n][m];
         boolean allmines = false;
@@ -94,8 +114,8 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                 b[x][y] = new JButton("?");
                 b[x][y].addActionListener(this);
                 b[x][y].addMouseListener(this);
-                frame.add(b[x][y]);
                 b[x][y].setEnabled(true);
+                juego.add(b[x][y]);
             }//end inner for
         }//end for
         frame.pack();
