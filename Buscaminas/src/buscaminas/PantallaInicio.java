@@ -123,19 +123,19 @@ public class PantallaInicio extends javax.swing.JFrame {
             n=10;
             m=10;
             mines=10;
-            buscaminas= new Buscaminas (n,m,mines);
+             new Buscaminas (n,m,mines);
             this.setVisible(false);
         }else if (i.equals("Intermedio")){
             n=16;
             m=16;
             mines=40;
-            buscaminas= new Buscaminas (n,m,mines);
+            new Buscaminas (n,m,mines);
             this.setVisible(false);
         }else if (i.equals("Experto")){
             n=32;
             m=16;
             mines=99;
-            buscaminas= new Buscaminas (n,m,mines);
+            new Buscaminas (n,m,mines);
             this.setVisible(false);
         }else {
             this.setVisible(false);
@@ -147,13 +147,13 @@ public class PantallaInicio extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    //public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try {
+        /*try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
@@ -168,16 +168,16 @@ public class PantallaInicio extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(PantallaInicio.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(PantallaInicio.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
+        }*/
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+        /*java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new PantallaInicio().setVisible(true);
             }
         });
-    }
+    }*/
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

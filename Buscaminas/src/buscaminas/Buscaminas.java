@@ -2,14 +2,10 @@ package buscaminas;
 
 import java.awt.*;
 import java.awt.event.*;
+ 
 import javax.swing.*;
-
-
-
-
 public class Buscaminas extends JFrame implements ActionListener, MouseListener{
-    int nomines ; //numero minas
-
+    int nomines ;
     int perm[][];
     String tmp;
     boolean found = false;
@@ -17,48 +13,45 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
     int column;
     int guesses[][];
     JButton b[][];
-    JButton reinicio;
     int[][] mines;
     boolean allmines;
-    int n;
-    int m;
+    int n ;
+    int m ;
     int deltax[] = {-1, 0, 1, -1, 1, -1, 0, 1};
     int deltay[] = {-1, -1, -1, 0, 0, 1, 1, 1};
     double starttime;
     double endtime;
     JFrame frame;
     JMenuBar menuBar;
-    JMenu uses;
+    JMenu options;
     JMenuItem reiniciar;
     public Buscaminas(int n, int m, int nomines){
+        frame= new JFrame();
+        
         this.n=n;
         this.m=m;
         this.nomines=nomines;
-        frame=new JFrame();
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        frame.setLayout(new GridLayout(n,m));
         menuBar = new JMenuBar();
+        
         frame.add(menuBar);
-        uses= new JMenu ("Uses");
-        menuBar.add(uses);
+        options= new JMenu ("Options");
+        menuBar.add(options);
         reiniciar= new JMenuItem("reset");
-        uses.add(reiniciar);
+        options.add(reiniciar);
         reiniciar.addActionListener(new ActionListener() {
             public void actionPerformed (ActionEvent e){
-                frame.dispose();
+                dispose();
                 new Buscaminas(n,m,nomines);
             }
         });
-        
-        //menuBar.add(this);
-                                        
-        
-        
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         perm = new int[n][m];
         boolean allmines = false;
         guesses = new int [n+2][m+2];
         mines = new int[n+2][m+2];
         b = new JButton [n][m];
-
+        
         for (int y = 0;y<m+2;y++){
             mines[0][y] = 3;
             mines[n+1][y] = 3;
@@ -113,7 +106,6 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
             }
         System.out.println("");}
         starttime = System.nanoTime();
-        //Crearse un menu bar, y en cada uno de los actions hacer un actionlistener que llame al subprograma que te ejecute lo que quieres
     }//end constructor Mine()
  
     public void actionPerformed(ActionEvent e){
@@ -137,7 +129,7 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                 JOptionPane.showMessageDialog(temporaryLostComponent, "You set off a Mine!!!!.");
                 System.exit(0);
         } else {
-            tmp = Integer.toString(perm[row][column]); //tocas una y se expanden muchas
+            tmp = Integer.toString(perm[row][column]);
             if (perm[row][column] == 0){
                     tmp = " ";
             }
@@ -152,7 +144,7 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
     }
  
     public void checkifend(){
-        int check= 0; //numero de minas que has marcado
+        int check= 0;
         for (int y = 0; y<m;y++){
             for (int x = 0;x<n;x++){
         if (b[x][y].isEnabled()){
@@ -198,9 +190,12 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
  
     }
  
-    //public static void main(String[] args){
-        //new Buscaminas (n,m,nomines);
-    //}
+    public static void main(String[] args){
+        PantallaInicio pi;
+        pi= new PantallaInicio();
+        pi.setVisible(true);
+        //new Buscaminas();
+    }
  
     public void mouseClicked(MouseEvent e) {
  
@@ -248,10 +243,4 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
     public void mouseReleased(MouseEvent arg0) {
         // TODO Auto-generated method stub
     }
-
-    
-
-    //private MenuListener thisMenuListener() {
-       // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    //}
 }//end class
