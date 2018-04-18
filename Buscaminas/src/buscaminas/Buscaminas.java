@@ -2,7 +2,9 @@ package buscaminas;
 
 import java.awt.*;
 import java.awt.event.*;
- 
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 import javax.swing.*;
 public class Buscaminas extends JFrame implements ActionListener, MouseListener{
     int nomines ;
@@ -25,7 +27,9 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
     JMenuBar menuBar;
     JMenu options;
     JMenuItem reiniciar;
+    ArrayList <String> tiempoJugador;
     public Buscaminas(int n, int m, int nomines){
+        tiempoJugador= new ArrayList();
         frame= new JFrame();
         
         this.n=n;
@@ -41,7 +45,7 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
         options.add(reiniciar);
         reiniciar.addActionListener(new ActionListener() {
             public void actionPerformed (ActionEvent e){
-                dispose();
+                frame.dispose();
                 new Buscaminas(n,m,nomines);
             }
         });
@@ -154,12 +158,20 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
         if (check == nomines){
             endtime = System.nanoTime();
             Component temporaryLostComponent = null;
-            JOptionPane.showInputDialog(temporaryLostComponent, "Congratulations you won!!! It took you "+(int)((endtime-starttime)/1000000000)+" seconds!");
+            int tiempo =(int)((endtime-starttime)/1000000000);
+            String nombre = JOptionPane.showInputDialog(temporaryLostComponent, "Congratulations you won!!! It took you "+tiempo+" seconds!\n"+"INSERTE SU NOMBRE SI QUIERE GUARDAR EL TIEMPO\n"+ "              Y PULSE ACEPTAR");
+            if(nombre!=null){
+                String jt = nombre+" " + tiempo+"\n";
+                tiempoJugador.add(jt);
+                for (String s: tiempoJugador){
+                    System.out.print (s);
+                }
+            }
         }
     }
  
     public void scan(int x, int y){
-        for (int a = 0;a<8;a++){
+        for (int a = 0;a<8;a++) {
             if (mines[x+1+deltax[a]][y+1+deltay[a]] == 3){
  
             } else if ((perm[x+deltax[a]][y+deltay[a]] == 0) && (mines[x+1+deltax[a]][y+1+deltay[a]] == 0) && (guesses[x+deltax[a]+1][y+deltay[a]+1] == 0)){
