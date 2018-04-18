@@ -71,9 +71,9 @@ public class Personalizado extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel1.setText("Inserte las medidas del tablero:");
 
-        jLabel2.setText("Ancho");
+        jLabel2.setText("Filas");
 
-        jLabel4.setText("Alto");
+        jLabel4.setText("Columnas");
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel5.setText("Inserte el número de minas:");
@@ -108,7 +108,7 @@ public class Personalizado extends javax.swing.JFrame {
                                 .addComponent(jLabel5)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(119, Short.MAX_VALUE))
+                .addContainerGap(103, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jButton1)
@@ -152,12 +152,12 @@ public class Personalizado extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         
-        n= (int) jSpinner1.getValue();
-        m= (int) jSpinner2.getValue();
+        n= (int) jSpinner2.getValue();
+        m= (int) jSpinner1.getValue();
         mines= (int) jSpinner3.getValue();
         
         
-        Buscaminas buscaminas = new Buscaminas (n,m,mines);
+        Buscaminas buscaminas = new Buscaminas (m,n,mines);
         buscaminas.setVisible(true);
         this.setVisible(false);
        

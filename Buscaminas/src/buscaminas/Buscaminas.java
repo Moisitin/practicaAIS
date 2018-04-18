@@ -154,7 +154,7 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
         if (check == nomines){
             endtime = System.nanoTime();
             Component temporaryLostComponent = null;
-            JOptionPane.showMessageDialog(temporaryLostComponent, "Congratulations you won!!! It took you "+(int)((endtime-starttime)/1000000000)+" seconds!");
+            JOptionPane.showInputDialog(temporaryLostComponent, "Congratulations you won!!! It took you "+(int)((endtime-starttime)/1000000000)+" seconds!");
         }
     }
  
