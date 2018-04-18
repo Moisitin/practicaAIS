@@ -2,8 +2,6 @@ package buscaminas;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.BufferedWriter;
-import java.io.File;
  
 import javax.swing.*;
 public class Buscaminas extends JFrame implements ActionListener, MouseListener{
@@ -35,9 +33,9 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
         this.nomines=nomines;
         frame.setLayout(new GridLayout(n,m));
         menuBar = new JMenuBar();
+        
         frame.setJMenuBar(menuBar);
-       // frame.add(menuBar);
-        options= new JMenu ("Options"); 
+        options= new JMenu ("Options");
         menuBar.add(options);
         reiniciar= new JMenuItem("reset");
         options.add(reiniciar);
@@ -154,18 +152,9 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
         }
             }}
         if (check == nomines){
-            String ruta = "C:\\Users\\Paula\\Documents\\GitHub\\practicaAIS";
-            File archivo = new File(ruta);
-            BufferedWriter bw;
-            if(archivo.exists()) {
-                
-            } else {
-      // El fichero no existe y hay que crearlo
-}
             endtime = System.nanoTime();
             Component temporaryLostComponent = null;
-            String nombre = JOptionPane.showInputDialog(temporaryLostComponent, "Congratulations you won!!! It took you "+(int)((endtime-starttime)/1000000000)+ " seconds! SI DESEAS GUARDAR EL TIEMPO INTRODUCE A CONTINUACIÓN TU NOMBRE Y PULSA ACEPTAR");
-            
+            JOptionPane.showMessageDialog(temporaryLostComponent, "Congratulations you won!!! It took you "+(int)((endtime-starttime)/1000000000)+" seconds!");
         }
     }
  
