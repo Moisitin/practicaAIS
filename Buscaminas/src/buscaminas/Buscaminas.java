@@ -28,6 +28,8 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
     JMenu options;
     JMenuItem reiniciar;
     ArrayList <String> tiempoJugador;
+    JLabel tiempo;
+    JLabel minas;
     public Buscaminas(int n, int m, int nomines){
         tiempoJugador= new ArrayList();
         frame= new JFrame();
@@ -49,6 +51,15 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                 new Buscaminas(n,m,nomines);
             }
         });
+        
+        tiempo= new JLabel("Tiempo");
+        tiempo.setForeground(Color.red);   
+        menuBar.add (tiempo);
+        
+        minas= new JLabel("Minas");
+        minas.setForeground(Color.blue);
+        menuBar.add(minas);
+        
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         perm = new int[n][m];
         boolean allmines = false;
