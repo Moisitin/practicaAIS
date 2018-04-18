@@ -2,10 +2,21 @@ package buscaminas;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.TimerTask;
 import java.util.Timer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.*;
 public class Buscaminas extends JFrame implements ActionListener, MouseListener{
@@ -30,16 +41,20 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
     JMenuBar menuBar;
     JMenu options;
     JMenuItem reiniciar;
-    ArrayList <String> tiempoJugador;
+    ArrayList<Integer> tiempos ;
+    ArrayList<String> nombres ;
     JLabel tiempo;
     JLabel minas;
     Timer timer;
     TimerTask t;
     int tiempom;
-    public Buscaminas(int n, int m, int nomines){
-        tiempoJugador= new ArrayList();
+    Jugador jugador;
+    public Buscaminas(int n, int m, int nomines,Jugador jugador){
+        tiempos = new ArrayList();
+        nombres = new ArrayList();
         frame= new JFrame();
         
+        this.jugador=jugador;
         this.n=n;
         this.m=m;
         this.nomines=nomines;
@@ -57,7 +72,7 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
         reiniciar.addActionListener(new ActionListener() {
             public void actionPerformed (ActionEvent e){
                 frame.dispose();
-                new Buscaminas(n,m,nomines);
+                new Buscaminas(n,m,nomines,jugador);
             }
         });
         
@@ -180,7 +195,7 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
         }
     }
  
-    public void checkifend(){
+    public void checkifend() {
         int check= 0;
         for (int y = 0; y<m;y++){
             for (int x = 0;x<n;x++){
@@ -192,14 +207,77 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
             timer.cancel();
             endtime = System.nanoTime();
             Component temporaryLostComponent = null;
-            int tiempo =(int)((endtime-starttime)/1000000000);
-            String nombre = JOptionPane.showInputDialog(temporaryLostComponent, "Congratulations you won!!! It took you "+tiempo+" seconds!\n"+"INSERTE SU NOMBRE SI QUIERE GUARDAR EL TIEMPO\n"+ "              Y PULSE ACEPTAR");
-            if(nombre!=null){
-                String jt = nombre+" " + tiempo+"\n";
-                tiempoJugador.add(jt);
-                for (String s: tiempoJugador){
-                    System.out.print (s);
-                }
+            int tiempoFinal =(int)((endtime-starttime)/1000000000);
+            if(jugador==null){
+                JOptionPane.showMessageDialog(temporaryLostComponent, "Congratulations you won!!! It took you "+tiempoFinal+" seconds!");
+            }else{
+                String nombre = JOptionPane.showInputDialog(temporaryLostComponent, "Congratulations you won!!! It took you "+tiempoFinal+" seconds!\n"+
+                                    "INSERTE SU NOMBRE SI QUIERE GUARDAR EL TIEMPO\n"+"              Y PULSE ACEPTAR");
+                if(nombre!=null){
+                    jugador.setNombre(nombre);
+                    jugador.setTiempo(tiempoFinal);
+                    
+                    if(jugador.getCategoria().equalsIgnoreCase("Principiante")){
+                    String ruta = "C:\\Users\\Paula\\Documents\\GitHub\\practicaAIS\\Buscaminas\\Principiante.txt";  
+                    FileWriter flwriter = null;
+                    File archivo = new File (ruta);
+                    BufferedWriter bw;
+                        try{
+                            if(archivo.exists()){
+                                FileReader fr = new FileReader (ruta);
+                                BufferedReader br = new BufferedReader(fr);
+                                String linea;
+                                while ((linea = br.readLine()) != null){
+                                    String str[] = linea.split (" ");
+                                    nombres.add(str[0]);
+                                    tiempos.add(Integer.parseInt(str[1]));      
+                                }
+
+                                for(int i=0; i<10; i++){
+                                    if((int) tiempos.get(i)< tiempoFinal){
+                                        int t1= (int) tiempos.get(i);
+                                        String n1= nombres.get(i);
+                                        if(i==10){
+                                           tiempos.add(i,tiempoFinal);
+                                           nombres.add(i,nombre);
+                                        }else{
+                                            tiempos.add(i, tiempoFinal);
+                                            nombres.add(i,nombre);
+                                            tiempos.add(t1);
+                                            nombres.add(n1);
+                                            //Collections.sort(tiempos);
+                                        }
+
+                                    }
+                                }
+                                fr.close();
+                                br.close();
+
+                                flwriter= new FileWriter(archivo);
+                                bw = new BufferedWriter(flwriter);
+                                for(int i=0; i<10;i++){
+                                    
+                                    bw.write(nombres.get(i)+" "+tiempos.get(i));
+                                }
+                                bw.flush();
+                                bw.close();
+                            }else{
+                                bw = new BufferedWriter(new FileWriter(archivo));
+                                bw.write(nombre+"  "+tiempoFinal);
+                                bw.flush();
+                                bw.close();
+                            }
+                            
+
+                        }catch (IOException ex) {
+                            Logger.getLogger(Buscaminas.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }else if (jugador.getCategoria().equalsIgnoreCase("Intermedio")){
+
+                    }else{
+                        
+                    }   
+            }
             }
         }
     }

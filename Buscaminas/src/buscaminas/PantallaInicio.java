@@ -117,25 +117,29 @@ public class PantallaInicio extends javax.swing.JFrame {
         int n;
         int m;
         int mines;
+        Jugador jugador;
         //obtener dato del combo
         String i = jComboBox1.getSelectedItem().toString();
         if(i.equals("Principiante")){
             n=10;
             m=10;
             mines=10;
-             new Buscaminas (n,m,mines);
+            jugador= new Jugador ("Principiante");
+            new Buscaminas (n,m,mines,jugador);
             this.setVisible(false);
         }else if (i.equals("Intermedio")){
             n=16;
             m=16;
             mines=40;
-            new Buscaminas (n,m,mines);
+            jugador= new Jugador ("Intermedio");
+            new Buscaminas (n,m,mines,jugador);
             this.setVisible(false);
         }else if (i.equals("Experto")){
             n=32;
             m=16;
             mines=99;
-            new Buscaminas (n,m,mines);
+            jugador= new Jugador ("Experto");
+            new Buscaminas (n,m,mines,jugador);
             this.setVisible(false);
         }else {
             this.setVisible(false);

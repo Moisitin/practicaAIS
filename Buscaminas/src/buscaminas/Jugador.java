@@ -9,6 +9,38 @@ package buscaminas;
  *
  * @author Paula
  */
-class Jugador {
+public class Jugador {
+    String nombre;
+    String categoria;
+    int tiempo;
     
+    public Jugador (String categoria){
+        this.categoria=categoria;
+        nombre=null;
+        tiempo=-1;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
+    public int getTiempo() {
+        return tiempo;
+    }
+
+    public void setTiempo(int tiempo) {
+        this.tiempo = tiempo;
+    }
 }
