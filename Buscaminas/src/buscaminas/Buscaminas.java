@@ -209,16 +209,13 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
             endtime = System.nanoTime();
             Component temporaryLostComponent = null;
             int tiempoFinal =(int)((endtime-starttime)/1000000000);
-            //if(jugador==null){
+            if((i.equalsIgnoreCase("Personalizado"))){
                 JOptionPane.showMessageDialog(temporaryLostComponent, "Congratulations you won!!! It took you "+tiempoFinal+" seconds!");
-            //}else{
+            }else{
                 String nombre = JOptionPane.showInputDialog(temporaryLostComponent, "Congratulations you won!!! It took you "+tiempoFinal+" seconds!\n"+
                                     "INSERTE SU NOMBRE SI QUIERE GUARDAR EL TIEMPO\n"+"              Y PULSE ACEPTAR");
                 if(nombre!=null){
-                    //jugador.setNombre(nombre);
-                    //jugador.setTiempo(tiempoFinal);
-                    
-                    //if(jugador.getCategoria().equalsIgnoreCase("Principiante")){
+                
                     if (i.equalsIgnoreCase("Principiante")){
                     String ruta = "Principiante.txt";  
                     FileWriter flwriter = null;
@@ -274,7 +271,7 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                         }catch (IOException ex) {
                             Logger.getLogger(Buscaminas.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                    //if (jugador.getCategoria().equalsIgnoreCase("Intermedio"))
+                    
                     }else if (i.equalsIgnoreCase("Intermedio")){
                     String ruta = "Intermedio.txt";  
                     FileWriter flwriter = null;
@@ -333,7 +330,7 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
 
                     }else if (i.equalsIgnoreCase("Avanzado")){
                     String ruta = "Avanzado.txt";  
-                    //if (jugador.getCategoria().equalsIgnoreCase("Intermedio"))
+                    
                     }else if (i.equalsIgnoreCase("Intermedio")){
                     String ruta = "Intermedio.txt";  
                     FileWriter flwriter = null;
@@ -444,13 +441,16 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
 
                         }catch (IOException ex) {
                             Logger.getLogger(Buscaminas.class.getName()).log(Level.SEVERE, null, ex);
-                        }{
-            }
+                        }
+                
+                    }
+                }
+                frame.dispose();
+                
             }
         }
     }
-    }
- 
+    
     public void scan(int x, int y){
         for (int a = 0;a<8;a++) {
             if (mines[x+1+deltax[a]][y+1+deltay[a]] == 3){
