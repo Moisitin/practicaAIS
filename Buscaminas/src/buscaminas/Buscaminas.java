@@ -5,6 +5,7 @@ import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -48,14 +49,12 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
     Timer timer;
     TimerTask t;
     int tiempom;
-    Jugador jugador;
     
     public Buscaminas(int n, int m, int nomines,String i){
         tiempos = new ArrayList();
         nombres = new ArrayList();
         frame= new JFrame();
         
-        //this.jugador=jugador;
         this.n=n;
         this.m=m;
         this.nomines=nomines;
@@ -197,66 +196,117 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
         }
     }
  
-    public void checkifend() {
+    public void checkifend(){
         int check= 0;
         for (int y = 0; y<m;y++){
             for (int x = 0;x<n;x++){
-        if (b[x][y].isEnabled()){
-            check++;
+                if (b[x][y].isEnabled()){
+                    check++;
+                }
+            }
         }
-            }}
         if (check == nomines){
             timer.cancel();
             endtime = System.nanoTime();
             Component temporaryLostComponent = null;
             int tiempoFinal =(int)((endtime-starttime)/1000000000);
-            //if(jugador==null){
+            if((i.equalsIgnoreCase("Personalizado"))){
                 JOptionPane.showMessageDialog(temporaryLostComponent, "Congratulations you won!!! It took you "+tiempoFinal+" seconds!");
-            //}else{
-                String nombre = JOptionPane.showInputDialog(temporaryLostComponent, "Congratulations you won!!! It took you "+tiempoFinal+" seconds!\n"+
-                                    "INSERTE SU NOMBRE SI QUIERE GUARDAR EL TIEMPO\n"+"              Y PULSE ACEPTAR");
-                if(nombre!=null){
-                    //jugador.setNombre(nombre);
-                    //jugador.setTiempo(tiempoFinal);
-                    
-                    //if(jugador.getCategoria().equalsIgnoreCase("Principiante")){
-                    if (i.equalsIgnoreCase("Principiante")){
-                    String ruta = "C:\\Users\\Paula\\Documents\\GitHub\\practicaAIS\\Buscaminas\\Principiante.txt";  
-                    FileWriter flwriter = null;
+            }else{
+                if (i.equalsIgnoreCase("Principiante")){
+                    String ruta = "Principiante.txt";
                     File archivo = new File (ruta);
-                    BufferedWriter bw;
-                        try{
-                            if(archivo.exists()){
-                                FileReader fr = new FileReader (ruta);
-                                BufferedReader br = new BufferedReader(fr);
-                                String linea;
-                                while ((linea = br.readLine()) != null){
-                                    String str[] = linea.split (" ");
-                                    nombres.add(str[0]);
-                                    tiempos.add(Integer.parseInt(str[1]));      
+                    try{
+                        if(archivo.exists()){
+                            FileReader fr = new FileReader (ruta);
+                            BufferedReader br = new BufferedReader(fr);
+                            String linea;
+                            while ((linea = br.readLine()) != null){
+                                String str[] = linea.split (" ");
+                                nombres.add(str[0]);
+                                tiempos.add(Integer.parseInt(str[1]));      
+                            }
+                            fr.close();
+                            br.close();
+
+                        }
+
+                }catch (IOException ex) {
+                Logger.getLogger(Buscaminas.class.getName()).log(Level.SEVERE, null, ex);
+                }   
+
+                int tamTiempos = tiempos.size();
+                if (tiempos.get(tamTiempos-1)>tiempoFinal){
+                    String nombre = JOptionPane.showInputDialog(temporaryLostComponent, "Congratulations you won!!! It took you "
+                            +tiempoFinal+" seconds!\n"+
+                    "INSERTE SU NOMBRE SI QUIERE GUARDAR EL TIEMPO\n"+"              Y PULSE ACEPTAR");
+
+                    for(int i=0; i<tamTiempos; i++){
+                        if ((tiempoFinal < tiempos.get(i))){
+                            nombres.add(i, nombre);
+                            tiempos.add(i, tiempoFinal);
+                        }
+                    }
+
+                    if (tamTiempos==10){
+                        tiempos.remove(10);
+                    }
+
+                } else {
+                    JOptionPane.showMessageDialog(temporaryLostComponent, "Congratulations you won!!! It took you "
+                            +tiempoFinal+" seconds!"); 
+                }
+
+
+
+
+            String nombre = JOptionPane.showInputDialog(temporaryLostComponent, "Congratulations you won!!! It took you "+tiempoFinal+" seconds!\n"+
+                                "INSERTE SU NOMBRE SI QUIERE GUARDAR EL TIEMPO\n"+"              Y PULSE ACEPTAR");
+            if(nombre!=null){
+                /*if (i.equalsIgnoreCase("Principiante")){
+                String ruta = "Principiante.txt"; */ 
+                FileWriter flwriter = null;
+                BufferedWriter bw;
+                    try{
+                        if(archivo.exists()){
+                            FileReader fr = new FileReader (ruta);
+                            BufferedReader br = new BufferedReader(fr);
+                            String linea;
+                            while ((linea = br.readLine()) != null){
+                                String str[] = linea.split (" ");
+                                nombres.add(str[0]);
+                                tiempos.add(Integer.parseInt(str[1]));      
+                            }
+
+                            fr.close();
+                            br.close();
+
+                            for(int i=0; i<10; i++){
+                                if ((tiempoFinal < tiempos.get(i))){
+                                    nombres.add(i, nombre);
+                                    tiempos.add(i, tiempoFinal);
                                 }
+                            }
+                            nombres.remove(11);
+                            tiempos.remove(11);
 
-                                for(int i=0; i<10; i++){
-                                    if((int) tiempos.get(i)< tiempoFinal){
-                                        int t1= (int) tiempos.get(i);
-                                        String n1= nombres.get(i);
-                                        if(i==10){
-                                           tiempos.add(i,tiempoFinal);
-                                           nombres.add(i,nombre);
-                                        }else{
-                                            tiempos.add(i, tiempoFinal);
-                                            nombres.add(i,nombre);
-                                            tiempos.add(t1);
-                                            nombres.add(n1);
-                                            //Collections.sort(tiempos);
-                                        }
-
+                                /*if((int) tiempos.get(i)< tiempoFinal){
+                                    int t1= (int) tiempos.get(i);
+                                    String n1= nombres.get(i);
+                                    if(i==10){
+                                       tiempos.add(i,tiempoFinal);
+                                       nombres.add(i,nombre);
+                                    }else{
+                                        tiempos.add(i, tiempoFinal);
+                                        nombres.add(i,nombre);
+                                        tiempos.add(t1);
+                                        nombres.add(n1);
+                                        //Collections.sort(tiempos);
                                     }
-                                }
-                                fr.close();
-                                br.close();
 
-                                flwriter= new FileWriter(archivo);
+                                }*/
+
+                            flwriter= new FileWriter(archivo);
                                 bw = new BufferedWriter(flwriter);
                                 for(int i=0; i<10;i++){
                                     
@@ -275,124 +325,15 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                         }catch (IOException ex) {
                             Logger.getLogger(Buscaminas.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                    //if (jugador.getCategoria().equalsIgnoreCase("Intermedio"))
-                    }else if (i.equalsIgnoreCase("Intermedio")){
-                    String ruta = "C:\\Users\\Paula\\Documents\\GitHub\\practicaAIS\\Buscaminas\\Intermedio.txt";  
-                    FileWriter flwriter = null;
-                    File archivo = new File (ruta);
-                    BufferedWriter bw;
-                        try{
-                            if(archivo.exists()){
-                                FileReader fr = new FileReader (ruta);
-                                BufferedReader br = new BufferedReader(fr);
-                                String linea;
-                                while ((linea = br.readLine()) != null){
-                                    String str[] = linea.split (" ");
-                                    nombres.add(str[0]);
-                                    tiempos.add(Integer.parseInt(str[1]));      
-                                }
-
-                                for(int i=0; i<10; i++){
-                                    if((int) tiempos.get(i)< tiempoFinal){
-                                        int t1= (int) tiempos.get(i);
-                                        String n1= nombres.get(i);
-                                        if(i==10){
-                                           tiempos.add(i,tiempoFinal);
-                                           nombres.add(i,nombre);
-                                        }else{
-                                            tiempos.add(i, tiempoFinal);
-                                            nombres.add(i,nombre);
-                                            tiempos.add(t1);
-                                            nombres.add(n1);
-                                            //Collections.sort(tiempos);
-                                        }
-
-                                    }
-                                }
-                                fr.close();
-                                br.close();
-
-                                flwriter= new FileWriter(archivo);
-                                bw = new BufferedWriter(flwriter);
-                                for(int i=0; i<10;i++){
-                                    
-                                    bw.write(nombres.get(i)+" "+tiempos.get(i));
-                                }
-                                bw.flush();
-                                bw.close();
-                            }else{
-                                bw = new BufferedWriter(new FileWriter(archivo));
-                                bw.write(nombre+"  "+tiempoFinal);
-                                bw.flush();
-                                bw.close();
-                            }
-                            
-
-                        }catch (IOException ex) {
-                            Logger.getLogger(Buscaminas.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-
-                    }else if (i.equalsIgnoreCase("Avanzado")){
-                    String ruta = "C:\\Users\\Paula\\Documents\\GitHub\\practicaAIS\\Buscaminas\\Avanzado.txt";  
-                    FileWriter flwriter = null;
-                    File archivo = new File (ruta);
-                    BufferedWriter bw;
-                        try{
-                            if(archivo.exists()){
-                                FileReader fr = new FileReader (ruta);
-                                BufferedReader br = new BufferedReader(fr);
-                                String linea;
-                                while ((linea = br.readLine()) != null){
-                                    String str[] = linea.split (" ");
-                                    nombres.add(str[0]);
-                                    tiempos.add(Integer.parseInt(str[1]));      
-                                }
-
-                                for(int i=0; i<10; i++){
-                                    if((int) tiempos.get(i)< tiempoFinal){
-                                        int t1= (int) tiempos.get(i);
-                                        String n1= nombres.get(i);
-                                        if(i==10){
-                                           tiempos.add(i,tiempoFinal);
-                                           nombres.add(i,nombre);
-                                        }else{
-                                            tiempos.add(i, tiempoFinal);
-                                            nombres.add(i,nombre);
-                                            tiempos.add(t1);
-                                            nombres.add(n1);
-                                            //Collections.sort(tiempos);
-                                        }
-
-                                    }
-                                }
-                                fr.close();
-                                br.close();
-
-                                flwriter= new FileWriter(archivo);
-                                bw = new BufferedWriter(flwriter);
-                                for(int i=0; i<10;i++){
-                                    
-                                    bw.write(nombres.get(i)+" "+tiempos.get(i));
-                                }
-                                bw.flush();
-                                bw.close();
-                            }else{
-                                bw = new BufferedWriter(new FileWriter(archivo));
-                                bw.write(nombre+"  "+tiempoFinal);
-                                bw.flush();
-                                bw.close();
-                            }
-                            
-
-                        }catch (IOException ex) {
-                            Logger.getLogger(Buscaminas.class.getName()).log(Level.SEVERE, null, ex);
-                        }{
-            }
+                }
+                if (i.equalsIgnoreCase("Intermedio")){
+                }
+                if (i.equalsIgnoreCase("Avanzado")){
+                }
             }
         }
+    } 
     }
-    }
- 
     public void scan(int x, int y){
         for (int a = 0;a<8;a++) {
             if (mines[x+1+deltax[a]][y+1+deltay[a]] == 3){
