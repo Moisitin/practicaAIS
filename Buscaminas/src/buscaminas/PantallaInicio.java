@@ -124,22 +124,22 @@ public class PantallaInicio extends javax.swing.JFrame {
             n=10;
             m=10;
             mines=10;
-            
-            new Buscaminas (n,m,mines,"Principiante");
+            //jugador= new Jugador ("Principiante");
+            new Buscaminas (n,m,mines,i);
             this.setVisible(false);
         }else if (i.equals("Intermedio")){
             n=16;
             m=16;
             mines=40;
-            
-            new Buscaminas (n,m,mines,"Intermedio");
+            //jugador= new Jugador ("Intermedio");
+            new Buscaminas (n,m,mines,i);
             this.setVisible(false);
         }else if (i.equals("Experto")){
             n=32;
             m=16;
             mines=99;
-            
-            new Buscaminas (n,m,mines,"Experto");
+            //jugador= new Jugador ("Experto");
+            new Buscaminas (n,m,mines,i);
             this.setVisible(false);
         }else {
             this.setVisible(false);

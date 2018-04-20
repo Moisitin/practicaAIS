@@ -48,7 +48,6 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
     Timer timer;
     TimerTask t;
     int tiempom;
-    //Jugador jugador;
     
     public Buscaminas(int n, int m, int nomines,String i){
         tiempos = new ArrayList();
@@ -275,6 +274,65 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                         }catch (IOException ex) {
                             Logger.getLogger(Buscaminas.class.getName()).log(Level.SEVERE, null, ex);
                         }
+                    //if (jugador.getCategoria().equalsIgnoreCase("Intermedio"))
+                    }else if (i.equalsIgnoreCase("Intermedio")){
+                    String ruta = "Intermedio.txt";  
+                    FileWriter flwriter = null;
+                    File archivo = new File (ruta);
+                    BufferedWriter bw;
+                        try{
+                            if(archivo.exists()){
+                                FileReader fr = new FileReader (ruta);
+                                BufferedReader br = new BufferedReader(fr);
+                                String linea;
+                                while ((linea = br.readLine()) != null){
+                                    String str[] = linea.split (" ");
+                                    nombres.add(str[0]);
+                                    tiempos.add(Integer.parseInt(str[1]));      
+                                }
+
+                                for(int i=0; i<10; i++){
+                                    if((int) tiempos.get(i)< tiempoFinal){
+                                        int t1= (int) tiempos.get(i);
+                                        String n1= nombres.get(i);
+                                        if(i==10){
+                                           tiempos.add(i,tiempoFinal);
+                                           nombres.add(i,nombre);
+                                        }else{
+                                            tiempos.add(i, tiempoFinal);
+                                            nombres.add(i,nombre);
+                                            tiempos.add(t1);
+                                            nombres.add(n1);
+                                            //Collections.sort(tiempos);
+                                        }
+
+                                    }
+                                }
+                                fr.close();
+                                br.close();
+
+                                flwriter= new FileWriter(archivo);
+                                bw = new BufferedWriter(flwriter);
+                                for(int i=0; i<10;i++){
+                                    
+                                    bw.write(nombres.get(i)+" "+tiempos.get(i));
+                                }
+                                bw.flush();
+                                bw.close();
+                            }else{
+                                bw = new BufferedWriter(new FileWriter(archivo));
+                                bw.write(nombre+"  "+tiempoFinal);
+                                bw.flush();
+                                bw.close();
+                            }
+                            
+
+                        }catch (IOException ex) {
+                            Logger.getLogger(Buscaminas.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                    }else if (i.equalsIgnoreCase("Avanzado")){
+                    String ruta = "Avanzado.txt";  
                     //if (jugador.getCategoria().equalsIgnoreCase("Intermedio"))
                     }else if (i.equalsIgnoreCase("Intermedio")){
                     String ruta = "Intermedio.txt";  
