@@ -212,77 +212,7 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
             Component temporaryLostComponent = null;
             int tiempoFinal =(int)((endtime-starttime)/1000000000);
             if((i.equalsIgnoreCase("Personalizado"))){
-                //JOptionPane.showMessageDialog(temporaryLostComponent, "Congratulations you won!!! It took you "+tiempoFinal+" seconds!");
-                String ruta = "Personalizado.txt";
-
-                    File archivo = new File (ruta);
-                    if( archivo.exists()){
-                    try{
-                            
-                        FileReader fr = new FileReader (ruta);
-                        BufferedReader br = new BufferedReader(fr);
-                        String linea;
-                        while ((linea = br.readLine()) != null){
-                            String str[] = linea.split (" ");
-                            nombres.add(str[0]);
-                            tiempos.add(Integer.parseInt(str[1]));      
-                        }
-                        fr.close();
-                        br.close();
-
-                        
-
-                    }catch (IOException ex) {
-                        Logger.getLogger(Buscaminas.class.getName()).log(Level.SEVERE, null, ex);
-                    }   
-
-                    int tamTiempos = tiempos.size();
-                    if (tiempos.get(tamTiempos-1)>tiempoFinal){
-                        String nombre = JOptionPane.showInputDialog(temporaryLostComponent, "Congratulations you won!!! It took you "
-                                +tiempoFinal+" seconds!\n"+
-                        "INSERTE SU NOMBRE SI QUIERE GUARDAR EL TIEMPO\n"+"              Y PULSE ACEPTAR");
-
-                        for(int i=0; i<tamTiempos-1; i++){
-                            if ((tiempoFinal < tiempos.get(i))){
-                                nombres.add(i, nombre);
-                                tiempos.add(i, tiempoFinal);
-                            }
-                        }
-                    
-                        if (tamTiempos==11){
-                        tiempos.remove(10);
-                        nombres.remove(10);
-                        }
-                        
-                        try{
-                            FileWriter fw= new FileWriter(archivo);
-                            BufferedWriter bw = new BufferedWriter(fw);
-                            for(int i=0; i<10;i++){
-                                bw.write(nombres.get(i)+" "+tiempos.get(i));
-                            }
-                            bw.flush();
-                            bw.close();
-
-                        }catch (IOException ex){
-                            Logger.getLogger(Buscaminas.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }else{
-                        String nombre = JOptionPane.showInputDialog(temporaryLostComponent, "Congratulations you won!!! It took you "
-                                +tiempoFinal+" seconds!\n"+
-                        "INSERTE SU NOMBRE SI QUIERE GUARDAR EL TIEMPO\n"+"              Y PULSE ACEPTAR");
-                        try{
-                        FileWriter fw= new FileWriter(archivo);
-                        BufferedWriter bw = new BufferedWriter(fw);
-                        bw.write(nombre+" "+tiempoFinal);
-                         }catch (IOException ex){
-                            Logger.getLogger(Buscaminas.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    
-                    } else {
-                        JOptionPane.showMessageDialog(temporaryLostComponent, "Congratulations you won!!! It took you "
-                            +tiempoFinal+" seconds!"); 
-                    }
+                JOptionPane.showMessageDialog(temporaryLostComponent, "Congratulations you won!!! It took you "+tiempoFinal+" seconds!");    
             }else{
         
                 if (i.equalsIgnoreCase("Principiante")){
