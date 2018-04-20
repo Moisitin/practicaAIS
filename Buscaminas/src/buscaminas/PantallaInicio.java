@@ -117,7 +117,11 @@ public class PantallaInicio extends javax.swing.JFrame {
         int n;
         int m;
         int mines;
+<<<<<<< HEAD
         
+=======
+       
+>>>>>>> 1307840972b03e1ad1a4eed4cce545a7deeb2c5f
         //obtener dato del combo
         String i = jComboBox1.getSelectedItem().toString();
         if(i.equals("Principiante")){
