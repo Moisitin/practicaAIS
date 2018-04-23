@@ -333,7 +333,7 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                             }
                             FileWriter fw= new FileWriter(archivo);
                             BufferedWriter bw = new BufferedWriter(fw);
-                            for(int i=0; i<tiempos.size()-1;i++){
+                            for(int i=0; i<tiempos.size();i++){
                                 bw.write(nombres.get(i)+" "+tiempos.get(i));
                             }
                             bw.flush();
