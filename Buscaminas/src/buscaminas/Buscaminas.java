@@ -251,7 +251,15 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                 if(tamTiempos==0){
                     String nombre = JOptionPane.showInputDialog(temporaryLostComponent, "Congratulations you won!!! It took you "
                         +tiempoFinal+" seconds!\n"+
-                        "INSERTE SU NOMBRE SI QUIERE GUARDAR EL TIEMPO\n"+"              Y PULSE ACEPTAR");
+                        "INSERT YOUR NAME IF YOU WANT TO SAVE YOUR SCORE\n"+"              IF NOT, PRESS CANCEL");
+                    while(nombre.contains(" ")){
+                         nombre = JOptionPane.showInputDialog(temporaryLostComponent, "Congratulations you won!!! It took you "
+                        +tiempoFinal+" seconds!\n"+
+                        "INSERT YOUR NAME IF YOU WANT TO SAVE YOUR SCORE\n"+"              IF NOT, PRESS CANCEL--> SPACES ARE FORBIDDEN");
+                        if(nombre==null){
+                            break;
+                        }
+                    }
                     if(nombre !=null){
                         FileWriter fw= new FileWriter(archivo);
                         BufferedWriter bw = new BufferedWriter(fw);
@@ -262,9 +270,17 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                 }else if(tamTiempos <10){
                     String nombre = JOptionPane.showInputDialog(temporaryLostComponent, "Congratulations you won!!! It took you "
                         +tiempoFinal+" seconds!\n"+
-                        "INSERTE SU NOMBRE SI QUIERE GUARDAR EL TIEMPO\n"+"              Y PULSE ACEPTAR");
+                        "INSERT YOUR NAME IF YOU WANT TO SAVE YOUR SCORE\n"+"              IF NOT, PRESS CANCEL");
+                    while(nombre.contains(" ")){
+                         nombre = JOptionPane.showInputDialog(temporaryLostComponent, "Congratulations you won!!! It took you "
+                        +tiempoFinal+" seconds!\n"+
+                        "INSERT YOUR NAME IF YOU WANT TO SAVE YOUR SCORE\n"+"              IF NOT, PRESS CANCEL--> SPACES ARE FORBIDDEN");
+                        if(nombre==null){
+                            break;
+                        }
+                    }
                     if(nombre!=null){
-                        for(int i=0; i<tamTiempos; i++){
+                        for(int i=0; i<=tamTiempos; i++){
                             if ((tiempoFinal < tiempos.get(i))){
                                 nombres.add(i, nombre);
                                 tiempos.add(i, tiempoFinal);
@@ -290,9 +306,17 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                     if (tiempos.get(tamTiempos)>tiempoFinal){
                         String nombre = JOptionPane.showInputDialog(temporaryLostComponent, "Congratulations you won!!! It took you "
                             +tiempoFinal+" seconds!\n"+
-                            "INSERTE SU NOMBRE SI QUIERE GUARDAR EL TIEMPO\n"+"              Y PULSE ACEPTAR");
+                            "INSERT YOUR NAME IF YOU WANT TO SAVE YOUR SCORE\n"+"              IF NOT, PRESS CANCEL");
+                        while(nombre.contains(" ")){
+                         nombre = JOptionPane.showInputDialog(temporaryLostComponent, "Congratulations you won!!! It took you "
+                        +tiempoFinal+" seconds!\n"+
+                        "INSERT YOUR NAME IF YOU WANT TO SAVE YOUR SCORE\n"+"              IF NOT, PRESS CANCEL--> SPACES ARE FORBIDDEN");
+                        if(nombre==null){
+                            break;
+                        }
+                    }
                         if (nombre!=null){
-                            for(int i=0; i<tamTiempos; i++){
+                            for(int i=0; i<=tamTiempos; i++){
                                 if ((tiempoFinal < tiempos.get(i))){
                                     nombres.add(i, nombre);
                                     tiempos.add(i, tiempoFinal);
