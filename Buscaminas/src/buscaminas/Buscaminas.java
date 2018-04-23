@@ -264,7 +264,7 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                         +tiempoFinal+" seconds!\n"+
                         "INSERTE SU NOMBRE SI QUIERE GUARDAR EL TIEMPO\n"+"              Y PULSE ACEPTAR");
                     if(nombre!=null){
-                        for(int i=0; i<tamTiempos-1; i++){
+                        for(int i=0; i<tamTiempos; i++){
                             if ((tiempoFinal < tiempos.get(i))){
                                 nombres.add(i, nombre);
                                 tiempos.add(i, tiempoFinal);
@@ -274,19 +274,19 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
 
                         FileWriter fw= new FileWriter(archivo);
                         BufferedWriter bw = new BufferedWriter(fw);
-                        for(int i=0; i<tiempos.size()-1;i++){
+                        for(int i=0; i<tamTiempos;i++){
                             bw.write(nombres.get(i)+" "+tiempos.get(i));
                         }
                         bw.flush();
                         bw.close();
                     }
                 }else if (tamTiempos==10){
-                    if (tiempos.get(tamTiempos-1)>tiempoFinal){
+                    if (tiempos.get(tamTiempos)>tiempoFinal){
                         String nombre = JOptionPane.showInputDialog(temporaryLostComponent, "Congratulations you won!!! It took you "
                             +tiempoFinal+" seconds!\n"+
                             "INSERTE SU NOMBRE SI QUIERE GUARDAR EL TIEMPO\n"+"              Y PULSE ACEPTAR");
                         if (nombre!=null){
-                            for(int i=0; i<tamTiempos-1; i++){
+                            for(int i=0; i<tamTiempos; i++){
                                 if ((tiempoFinal < tiempos.get(i))){
                                     nombres.add(i, nombre);
                                     tiempos.add(i, tiempoFinal);
