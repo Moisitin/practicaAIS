@@ -38,6 +38,10 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
     JMenuBar menuBar;
     JMenu options;
     JMenuItem reiniciar;
+    JMenu tiemposM;
+    JMenuItem tiemposP;
+    JMenuItem tiemposI;
+    JMenuItem tiemposE;
     ArrayList<Integer> tiempos ;
     ArrayList<String> nombres ;
     JLabel tiempo;
@@ -64,7 +68,7 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
         options= new JMenu ("Options");
         menuBar.add(options);
         
-        reiniciar= new JMenuItem("reset");
+        reiniciar= new JMenuItem("Reset");
         options.add(reiniciar);
         reiniciar.addActionListener(new ActionListener() {
             public void actionPerformed (ActionEvent e){
@@ -91,6 +95,15 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
             }
         };
          timer.schedule(t,0, 1000);
+         
+        tiemposM = new JMenu ("Mostrar tiempos");
+        options.add(tiemposM);
+        tiemposP = new JMenuItem ("Principiante");
+        tiemposM.add(tiemposP);
+        tiemposI = new JMenuItem ("Intermedio");
+        tiemposM.add(tiemposI);
+        tiemposE = new JMenuItem ("Experto");
+        tiemposM.add(tiemposE);
         
         
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -319,7 +332,7 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                         }
                     }
                         if (nombre!=null){
-                            for(int i=0; i<=tamTiempos; i++){
+                            for(int i=0; i<tamTiempos; i++){
                                 if ((tiempoFinal < tiempos.get(i))){
                                     nombres.add(i, nombre);
                                     tiempos.add(i, tiempoFinal);
