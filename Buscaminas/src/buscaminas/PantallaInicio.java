@@ -11,6 +11,12 @@ import java.awt.Toolkit;
 /**
  *
  * @author Paula
+ * 
+ * En este frame lo unico que hacemos es hacerle elegir al usuario en que categoria
+ * desea jugar. Además, el Personalizado redirije a otro frame donde se insertarán medidas
+ * del tablero y numero de minas.
+ * Una vez se tenga todo seleccionado se redijira al Buscaminas donde se podrá 
+ * jugar la partda.
  */
 public class PantallaInicio extends javax.swing.JFrame {
     

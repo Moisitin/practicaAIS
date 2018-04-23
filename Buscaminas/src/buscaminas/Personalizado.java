@@ -12,6 +12,9 @@ import javax.swing.SpinnerNumberModel;
 /**
  *
  * @author Paula
+ * 
+ * En este frame unicamente dejamos que el usuario elija las dimensiones 
+ * del tablero en el que quiere jugar y el numero de minas que quiere tener
  */
 public class Personalizado extends javax.swing.JFrame {
     
