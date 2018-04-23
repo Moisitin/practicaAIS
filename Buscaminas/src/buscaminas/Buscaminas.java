@@ -263,7 +263,7 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                     if(nombre !=null){
                         FileWriter fw= new FileWriter(archivo);
                         BufferedWriter bw = new BufferedWriter(fw);
-                        bw.write(nombre+" "+tiempoFinal);
+                        bw.write(nombre+" "+tiempoFinal+"\n");
                         bw.flush();
                         bw.close();
                     }
@@ -300,7 +300,7 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                         FileWriter fw= new FileWriter(archivo);
                         BufferedWriter bw = new BufferedWriter(fw);
                         for(int i=0; i<tiempos.size();i++){
-                            bw.write(nombres.get(i)+" "+tiempos.get(i));
+                            bw.write(nombres.get(i)+" "+tiempos.get(i)+"\n");
                         }
                         bw.flush();
                         bw.close();
@@ -334,7 +334,7 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                             FileWriter fw= new FileWriter(archivo);
                             BufferedWriter bw = new BufferedWriter(fw);
                             for(int i=0; i<tiempos.size();i++){
-                                bw.write(nombres.get(i)+" "+tiempos.get(i));
+                                bw.write(nombres.get(i)+" "+tiempos.get(i)+"\n");
                             }
                             bw.flush();
                             bw.close();
