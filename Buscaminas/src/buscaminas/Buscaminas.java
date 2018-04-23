@@ -280,27 +280,26 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                         }
                     }
                     if(nombre!=null){
+                        int posicion=-1;
                         for(int i=0; i<tamTiempos; i++){
                             if ((tiempoFinal < tiempos.get(i))){
-                                nombres.add(i, nombre);
-                                tiempos.add(i, tiempoFinal);
+                                posicion=i;
                                 break;
                             } 
-                            if(i==(tamTiempos-1)){
-                                nombres.add(nombre);
-                                tiempos.add(tiempoFinal);
-                            }
                         }   
                         
-                       /* if (tamTiempos == tiempos.size()){
+                        if(posicion==-1){
                             nombres.add(nombre);
                             tiempos.add(tiempoFinal);
-                        }  */  
+                        }else{
+                            nombres.add(posicion, nombre);
+                            tiempos.add(posicion, tiempoFinal);
+                        }
                         
 
                         FileWriter fw= new FileWriter(archivo);
                         BufferedWriter bw = new BufferedWriter(fw);
-                        for(int i=0; i<tamTiempos;i++){
+                        for(int i=0; i<tiempos.size();i++){
                             bw.write(nombres.get(i)+" "+tiempos.get(i));
                         }
                         bw.flush();
