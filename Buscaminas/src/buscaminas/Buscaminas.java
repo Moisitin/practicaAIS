@@ -5,10 +5,14 @@ import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.TimerTask;
 import java.util.Timer;
@@ -16,12 +20,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.*;
+import static javax.swing.JFrame.EXIT_ON_CLOSE;
 public class Buscaminas extends JFrame implements ActionListener, MouseListener{
     
     int nomines ;
-    int contmines;      //Hemos creado un contador de minas que tiene el mismo valor que nomines
-                        //esto lo hemos hecho porque la otra variable no se podía modificar para mostrar el numero de minas
-                        // que quedaban ya que nos indica cúando se ha ganado la partida
+    int contmines;      /*Hemos creado un contador de minas que tiene el mismo valor que nomines
+                         esto lo hemos hecho porque la otra variable no se podía modificar para mostrar el numero de minas
+                         que quedaban ya que nos indica cúando se ha ganado la partida*/
     int perm[][];
     String tmp, i;
     boolean found = false;
@@ -45,6 +50,8 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
     JMenuItem tiemposP; //Parte del menu donde podremos acceder a ver los tiempos de la categoría Principiante
     JMenuItem tiemposI; //Parte del menu donde podremos acceder a ver los tiempos de la categoría Intermedio
     JMenuItem tiemposE; //Parte del menu donde podremos acceder a ver los tiempos de la categoría Experto
+    JMenuItem guardarPartida;
+    JMenuItem cargarPartida;
     
     ArrayList<Integer> tiempos ; //array donde guardamos los tiempos que contiene el fichero
                                 // y en el que insertaremos el nuevo tiempo si corresponde
@@ -120,8 +127,72 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
             }
         };
         timer.schedule(t,0, 1000); //con esto se logra que el tiempo se muestre segundo a segundo 
-         
         
+        //Añadimos en el menú Options la opción de que el usuario guarde una partida
+        guardarPartida = new JMenuItem("Guardar Partida");
+        options.add(guardarPartida);
+        guardarPartida.addActionListener(new ActionListener() {  //Para guardar la partida 
+        public void actionPerformed (ActionEvent e){    //Se crea un fichero con las características de la partida actual
+            try{
+                //Volcamos las características de nuestra partida en el fichero
+                File archivo;
+                String ruta ="PartidaGuardada.txt";
+                archivo = new File (ruta);
+                archivo.createNewFile();
+                FileOutputStream fos= new FileOutputStream(archivo);
+                ObjectOutputStream oos = new ObjectOutputStream(fos);
+                oos.writeInt(n);
+                oos.writeInt(m);
+                oos.writeInt(nomines);
+                oos.writeInt(contmines);
+                oos.writeObject(i);
+                oos.writeObject(tmp);
+                oos.writeBoolean(found);
+                oos.writeInt(row);
+                oos.writeInt(column);
+                oos.writeInt(tiempom);
+                oos.writeObject(perm);
+                oos.writeObject(guesses);
+                oos.writeObject(mines);
+                
+                /*for(int i == 0;i = b[j];i++){
+                    
+                }
+*/
+                oos.flush();
+                oos.close();
+            } catch (IOException ex) {
+                Logger.getLogger(Buscaminas.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+        });
+        
+        //Añadimos en el menú Options la opción de que el usuario cargue una partida
+        cargarPartida = new JMenuItem("Cargar Partida");
+        options.add(cargarPartida);
+        cargarPartida.addActionListener(new ActionListener() {  //Para cargar la partida 
+        public void actionPerformed (ActionEvent e){     //Se llama a un fichero con todas las características de la ultima partida
+            frame.dispose();
+            try{    
+                /*Leemos el archivo y vamos volcando las características de la anterior partida
+                en nuestra partida
+                */
+                File archivo;
+                String ruta ="PartidaGuardada.txt";
+                archivo = new File (ruta);
+                archivo.createNewFile();
+                FileInputStream fis = new FileInputStream(archivo);
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                
+                //n = 
+                
+            } catch (IOException ex) {
+                Logger.getLogger(Buscaminas.class.getName()).log(Level.SEVERE, null, ex);
+            }           
+        }
+        });
+
         //Añadimos más componentes al menú para hacer legubles los ficheros de las puntuaciones
         //desde la propia aplicación
         //Acontinuación explicaremos como hacemos para mostrar el fichero:

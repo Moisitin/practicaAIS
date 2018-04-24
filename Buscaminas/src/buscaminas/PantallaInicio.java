@@ -140,7 +140,7 @@ public class PantallaInicio extends javax.swing.JFrame {
             this.setVisible(false);
         }else if (i.equals("Experto")){
             n=32;
-            m=16;
+            m=32;
             mines=99;
             new Buscaminas (m,n,mines,i);
             this.setVisible(false);

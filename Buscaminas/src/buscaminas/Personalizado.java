@@ -7,6 +7,7 @@ package buscaminas;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
 
 /**
@@ -159,11 +160,15 @@ public class Personalizado extends javax.swing.JFrame {
         m= (int) jSpinner1.getValue();
         mines= (int) jSpinner3.getValue();
         
-        
-        Buscaminas buscaminas = new Buscaminas (m,n,mines,"Personalizado");
-        buscaminas.setVisible(true);
-        this.setVisible(false);
-       
+        if ((n==m)){
+            Buscaminas buscaminas = new Buscaminas (m,n,mines,"Personalizado");
+            buscaminas.setVisible(true);
+            this.setVisible(false);
+            
+        } else {
+            
+            JOptionPane.showMessageDialog(null, "You must insert the same value for rows and columns");
+        }
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
