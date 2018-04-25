@@ -146,10 +146,10 @@ public class Personalizado extends javax.swing.JFrame {
         m= (int) jSpinner1.getValue();
         mines= (int) jSpinner3.getValue();
         
-
-        Buscaminas buscaminas = new Buscaminas (n,m,mines,"Personalizado");
-        buscaminas.setVisible(true);
         this.setVisible(false);
+        Buscaminas buscaminas = new Buscaminas (n,m,mines,"Personalizado");
+        
+        
 
         
     }//GEN-LAST:event_jButton1ActionPerformed
