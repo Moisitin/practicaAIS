@@ -19,8 +19,9 @@ import javax.swing.SpinnerNumberModel;
  */
 public class Personalizado extends javax.swing.JFrame {
     
-   // private Buscaminas buscaminas;
+   // Inicializamos las variables
     int n,m,mines;
+    boolean puedesJugar;
   
     
     
@@ -28,6 +29,7 @@ public class Personalizado extends javax.swing.JFrame {
      * Creates new form Personalizado
      */
     public Personalizado() {
+        //Declaramos los Spinner
         initComponents();
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
@@ -154,20 +156,25 @@ public class Personalizado extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //Método que entra en funcionamiento al pulsar "Aceptar"
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         
+        //Recogemos el valor de los Spinner
         n= (int) jSpinner2.getValue();
         m= (int) jSpinner1.getValue();
         mines= (int) jSpinner3.getValue();
         
-        if ((n==m)){
-            Buscaminas buscaminas = new Buscaminas (m,n,mines,"Personalizado");
-            buscaminas.setVisible(true);
-            this.setVisible(false);
-            
+        //Comprobamos que el numero de filas y columnas sea el mismo
+        if (!(n==m)){
+             JOptionPane.showMessageDialog(null, "You must insert the same value for rows and columns");
+             puedesJugar = false;
         } else {
-            
-            JOptionPane.showMessageDialog(null, "You must insert the same value for rows and columns");
+            puedesJugar = true;
+        }
+        if (puedesJugar){
+        Buscaminas buscaminas = new Buscaminas (m,n,mines,"Personalizado");
+        buscaminas.setVisible(true);
+        this.setVisible(false);
         }
         
     }//GEN-LAST:event_jButton1ActionPerformed

@@ -1,5 +1,14 @@
 package buscaminas;
 
+/*Práctica 2 Ampiación Ingeniería del Software
+Doble Grado GII + ADE       Curso: 2017 - 2018
+Componentes:
+-Silvia Pascual
+-Pablo Castaño
+-Paula Sestafe
+-Moises Garcia
+*/
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.BufferedReader;
@@ -18,74 +27,88 @@ import java.util.TimerTask;
 import java.util.Timer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javax.swing.*;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
+
+/*
+Clase pública en la que instanciaremos todos los métodos y variables que utilizará nuestro código
+*/
+
 public class Buscaminas extends JFrame implements ActionListener, MouseListener{
-    
+    /*
+    Hemos creado un contador de minas que tiene el mismo valor que nomines
+    esto lo hemos hecho porque la otra variable no se podía modificar para 
+    mostrar el numero de minas que quedaban ya que nos indica cúando se ha ganado la partida
+    */
     int nomines ;
-    int contmines;      /*Hemos creado un contador de minas que tiene el mismo valor que nomines
-                         esto lo hemos hecho porque la otra variable no se podía modificar para mostrar el numero de minas
-                         que quedaban ya que nos indica cúando se ha ganado la partida*/
+    int contmines; 
+    
     int perm[][];
     String tmp, i;
     boolean found = false;
     int row;
     int column;
     int guesses[][];
-    JButton b[][];
-    int[][] mines;
-    boolean allmines;
+    JButton b[][]; //Matriz principal de botones del juego
+    int[][] mines; //Matriz de minas 
+    boolean allmines; //A True si todas las minas son marcadas
     int n ;
     int m ;
+    
+    //Posiciones alrededor de una casilla para conocer lo que esta alrededor
     int deltax[] = {-1, 0, 1, -1, 1, -1, 0, 1};
     int deltay[] = {-1, -1, -1, 0, 0, 1, 1, 1};
+    
+    //Inicio y final del juego
     double starttime;
     double endtime;
-    JFrame frame; //creamos un frame que nos sirve para ir añadiendo componentes a nuestra pantalla Buscaminas
-    JMenuBar menuBar;
+    
+    //Parte dedicada a declarar los atributos usados en la GUI
+    JFrame frame; //Frame con todos los componentes que muestra Buscaminas
+    JMenuBar menuBar; //Barra superior
     JMenu options;
-    JMenuItem reiniciar;
-    JMenu tiemposM;
-    JMenuItem tiemposP; //Parte del menu donde podremos acceder a ver los tiempos de la categoría Principiante
-    JMenuItem tiemposI; //Parte del menu donde podremos acceder a ver los tiempos de la categoría Intermedio
-    JMenuItem tiemposE; //Parte del menu donde podremos acceder a ver los tiempos de la categoría Experto
+    JMenuItem reiniciar;    
     JMenuItem guardarPartida;
     JMenuItem cargarPartida;
-    
-    ArrayList<Integer> tiempos ; //array donde guardamos los tiempos que contiene el fichero
-                                // y en el que insertaremos el nuevo tiempo si corresponde
-    ArrayList<String> nombres ;//array donde guardamos los nombres que contiene el fichero
-                                // y en el que insertaremos el nuevo nombre si corresponde
-    JLabel tiempo;
-    JLabel minas;
-    
-    //El Timer y el TimerTask se utilizan para poder mostrar el tiempo que lleva ejecutandose
-    //la partida que se está jugando
-    Timer timer;
-    TimerTask t;
-    int tiempom;
+    //Acceso a los tiempos de las distintas categorías
+    JMenu tiemposM;
+    JMenuItem tiemposP; 
+    JMenuItem tiemposI; 
+    JMenuItem tiemposE;
+    //Frame para mostrar el listado de mejores d epuntuaciones de cada categoría
     JFrame framep;
     JFrame framei;
     JFrame framee;
     
-    //Pasamos como parámetros la medida del tablero y un String que se corresponde con la categoría
-    //en la que se jugará la partida
+    JLabel tiempo;
+    JLabel minas;
+
+    //Arrays con los nombres y los tiempos de las mejores partidas
+    ArrayList<Integer> tiempos ;
+    ArrayList<String> nombres ;
+    //El Timer y el TimerTask se utilizan para poder mostrar el tiempo que lleva ejecutandose la partida que se está jugando
+    Timer timer;
+    TimerTask t;
+    int tiempom;
+   
+    /*
+    Pasamos como parámetros la medida del tablero, el numero de mina y un String que 
+    se corresponde con la categoríaen la que se jugará la partida
+    */
     public Buscaminas(int n, int m, int nomines,String i){      
         
-        tiempos = new ArrayList();
-        nombres = new ArrayList();
-        frame= new JFrame();
-        
+        //Inicialización de variables
         this.n=n;
         this.m=m;
         this.nomines=nomines;
         this.i =i;
         contmines=nomines;
-        tiempom=-1;
+        tiempom=-1;        
+        tiempos = new ArrayList();
+        nombres = new ArrayList();
         
-        //se asignan las características del frame y se añaden todos los componentes necesarios
-        //para que la pantalla tenga una amplia funcionalidad
+        //Inicialización del Frame con todas sus características y sus componentes
+        frame= new JFrame();
         frame.setLayout(new GridLayout(n,m));
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         menuBar = new JMenuBar();
@@ -94,26 +117,31 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
         options= new JMenu ("Options");
         menuBar.add(options);
         
+        //Opción de reinicio
         reiniciar= new JMenuItem("Reset");
         options.add(reiniciar);
-        reiniciar.addActionListener(new ActionListener() {  //Para reniciar 
+        reiniciar.addActionListener(new ActionListener() { 
             public void actionPerformed (ActionEvent e){
-                frame.dispose();                          //necesitamos que la pantalla actual se elimine
-                new Buscaminas(n,m,nomines,i);           //y se cree una nueva partida con las mismas características que la anterior
+                frame.dispose();                  //Elimina el Frame actual
+                new Buscaminas(n,m,nomines,i);    //Llama al contructor para iniciar una partida igual
             }
         });
         
-        //Creamos un label donde se van mostrando las minas que quedan por marcar
-        //posteriormente indicaremos que más instrucciones hemos añadido para que 
-        //esto tenga un buen funcionamiento
+        /*
+        Creamos un label donde se van mostrando las minas que quedan por marcar
+        posteriormente indicaremos que más instrucciones hemos añadido para que 
+        esto tenga un buen funcionamiento
+        */
         minas= new JLabel();
         minas.setForeground(Color.blue);
         menuBar.add(minas);
         minas.setText("Minas: "+contmines+" ");
         
-        //Creamos un label donde se va mostrando el tiempo de ejecución de la partida
-        //para ello se han añadido otras instrucciones más adelante del código que
-        //señalaremos
+        /*
+        Creamos un label donde se va mostrando el tiempo de ejecución de la partida
+        para ello se han añadido otras instrucciones más adelante del código que
+        señalaremos
+        */
         tiempo= new JLabel();
         tiempo.setForeground(Color.red);   
         menuBar.add (tiempo);
@@ -128,12 +156,84 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
         };
         timer.schedule(t,0, 1000); //con esto se logra que el tiempo se muestre segundo a segundo 
         
+        /*
+        Se van inicializando las distintas matrices necesarias para el juego
+        */
+        perm = new int[n][m];
+        boolean allmines = false;
+        guesses = new int [n+2][m+2];
+        mines = new int[n+2][m+2];
+        b = new JButton [n][m];
+        
+        for (int y = 0;y<m+2;y++){
+            mines[0][y] = 3;
+            mines[n+1][y] = 3;
+            guesses[0][y] = 3;
+            guesses[n+1][y] = 3;
+        }
+        for (int x = 0;x<n+2;x++){
+            mines[x][0] = 3;
+            mines[x][m+1] = 3;
+            guesses[x][0] = 3;
+            guesses[x][m+1] = 3;
+        }
+        
+        //Se colocan las minas y se comprueban que están todas
+        do {
+            int check = 0;
+            for (int y = 1;y<m+1;y++){
+                for (int x = 1;x<n+1;x++){
+                    mines[x][y] = 0;
+                    guesses[x][y] = 0;
+                }
+            }
+            for (int x = 0;x<nomines;x++){
+                mines [(int) (Math.random()*(n)+1)][(int) (Math.random()*(m)+1)] = 1;
+            }
+            for (int x = 0;x<n;x++){
+                for (int y = 0;y<m;y++){
+                if (mines[x+1][y+1] == 1){
+                        check++;
+                    }
+                }
+            }
+            if (check == nomines){
+                allmines = true;
+            }
+        }while (allmines == false);
+        
+        //Se inicializa la matriz de button y se añade al Frame
+        for (int y = 0;y<m;y++){
+            for (int x = 0;x<n;x++){
+                if ((mines[x+1][y+1] == 0) || (mines[x+1][y+1] == 1)){
+                    perm[x][y] = perimcheck(x,y);
+                }
+                b[x][y] = new JButton("?");
+                b[x][y].addActionListener(this);
+                b[x][y].addMouseListener(this);
+                frame.add(b[x][y]);             
+                b[x][y].setEnabled(true);
+            }//end inner for
+        }//end for
+        
+        //Se da forma al Frame y se visualiza
+        frame.pack();       
+        frame.setVisible(true);
+        
+        for (int y = 0;y<m+2;y++){
+            for (int x = 0;x<n+2;x++){
+                System.out.print(mines[x][y]);
+            }
+        System.out.println("");}
+        starttime = System.nanoTime();
+
         //Añadimos en el menú Options la opción de que el usuario guarde una partida
         guardarPartida = new JMenuItem("Guardar Partida");
         options.add(guardarPartida);
-        guardarPartida.addActionListener(new ActionListener() {  //Para guardar la partida 
-        public void actionPerformed (ActionEvent e){    //Se crea un fichero con las características de la partida actual
+        guardarPartida.addActionListener(new ActionListener() {  
+        public void actionPerformed (ActionEvent e){    
             try{
+                
                 //Volcamos las características de nuestra partida en el fichero
                 File archivo;
                 String ruta ="PartidaGuardada.txt";
@@ -141,6 +241,7 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                 archivo.createNewFile();
                 FileOutputStream fos= new FileOutputStream(archivo);
                 ObjectOutputStream oos = new ObjectOutputStream(fos);
+                
                 oos.writeInt(n);
                 oos.writeInt(m);
                 oos.writeInt(nomines);
@@ -155,13 +256,13 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                 oos.writeObject(guesses);
                 oos.writeObject(mines);
                 
+                //La matriz b debemos pasarla como String
                 for(int i = 0;i < n;i++){
                     for (int j = 0; j < m; j++){
                         oos.writeObject(b[i][j].getText());                
                     }
                 }
-
-                
+ 
                 oos.close();
             } catch (IOException ex) {
                 Logger.getLogger(Buscaminas.class.getName()).log(Level.SEVERE, null, ex);
@@ -173,8 +274,8 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
         //Añadimos en el menú Options la opción de que el usuario cargue una partida
         cargarPartida = new JMenuItem("Cargar Partida");
         options.add(cargarPartida);
-        cargarPartida.addActionListener(new ActionListener() {  //Para cargar la partida 
-        public void actionPerformed (ActionEvent e){     //Se llama a un fichero con todas las características de la ultima partida
+        cargarPartida.addActionListener(new ActionListener() {   
+        public void actionPerformed (ActionEvent e){     
             frame.dispose();
             try{    
                 /*Leemos el archivo y vamos volcando las características de la anterior partida
@@ -201,13 +302,16 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                 int[][] guesses = (int[][])ois.readObject();
                 int[][] mines = (int[][])ois.readObject();
                 
+                //Debemos recuperar la matriz b a partir de los String
+                
                JButton[][] b = new JButton[n][m];
-               
                for(int k = 0;k < n;k++){
                     for (int j = 0; j < m; j++){
                         b[k][j] = new JButton((String)ois.readObject());
                     }
                 }
+               
+               //Llamada a un nuevo constructor con todas las características modificables
                 new Buscaminas(n, m, nomines, contmines, i, tmp, found, row, column, tiempom,
                     perm, guesses, mines, b);
                 
@@ -223,9 +327,10 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
         }
         });
 
-        //Añadimos más componentes al menú para hacer legubles los ficheros de las puntuaciones
-        //desde la propia aplicación
-        //Acontinuación explicaremos como hacemos para mostrar el fichero:
+        /*
+        Añadimos más componentes al menú para hacer legubles los ficheros de las puntuaciones
+        desde la propia aplicación
+        */
         tiemposM = new JMenu ("Mostrar tiempos");
         options.add(tiemposM);
         tiemposP = new JMenuItem ("Principiante");
@@ -234,23 +339,28 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
         tiemposM.add(tiemposI);
         tiemposE = new JMenuItem ("Experto");
         tiemposM.add(tiemposE);
-        //El fichero se tiene que mostrar cuando haces presión en cada una de las opciones
-        //Hemos creado tres ficheros: uno para cada caegoría
+        
+        /*
+        Métodos`para mostrar los mejores tiempos por pantalla
+        */
         tiemposP.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                try{    
-                    frame.dispose();//La pantalla anterior la cerramos
+                try{
+                    //Cerramos la pantalla anterior
+                    frame.dispose();
+                    
                     //Creamos una nueva ventana con las siguientes características:
                     framep= new JFrame ("Tiempos Principiante");
                     framep.setVisible(true);
                     framep.setSize(500,500);
-                  
                     framep.setLayout(new GridLayout(10,1));//10lineas y 1 columna
                     framep.setDefaultCloseOperation(EXIT_ON_CLOSE);
                 
-                    //Leemos el archivo e insertamos línea a línea a un JLabel para
-                    //que aparezca en la pantalla
+                    /*
+                    Leemos el archivo e insertamos línea a línea a un JLabel para
+                    que aparezca en la pantalla
+                    */
                     File archivo= new File("Principiante.txt");
                     archivo.createNewFile();
                     FileReader fr = new FileReader (archivo);
@@ -279,9 +389,7 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                   
                     framei.setLayout(new GridLayout(10,1));
                     framei.setDefaultCloseOperation(EXIT_ON_CLOSE);
-                
-                
-                
+                          
                     File archivo= new File("Intermedio.txt");
                     archivo.createNewFile();
                     FileReader fr = new FileReader (archivo);
@@ -311,8 +419,6 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                     framee.setLayout(new GridLayout(10,1));
                     framee.setDefaultCloseOperation(EXIT_ON_CLOSE);
                 
-                
-                
                     File archivo= new File("Experto.txt");
                     archivo.createNewFile();
                     FileReader fr = new FileReader (archivo);
@@ -329,75 +435,18 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
             }
             
         });
-        
-        
-        
-        perm = new int[n][m];
-        boolean allmines = false;
-        guesses = new int [n+2][m+2];
-        mines = new int[n+2][m+2];
-        b = new JButton [n][m];
-        
-        for (int y = 0;y<m+2;y++){
-            mines[0][y] = 3;
-            mines[n+1][y] = 3;
-            guesses[0][y] = 3;
-            guesses[n+1][y] = 3;
-        }
-        for (int x = 0;x<n+2;x++){
-            mines[x][0] = 3;
-            mines[x][m+1] = 3;
-            guesses[x][0] = 3;
-            guesses[x][m+1] = 3;
-        }
-        do {
-            int check = 0;
-            for (int y = 1;y<m+1;y++){
-                for (int x = 1;x<n+1;x++){
-                    mines[x][y] = 0;
-                    guesses[x][y] = 0;
-                }
-            }
-            for (int x = 0;x<nomines;x++){
-                mines [(int) (Math.random()*(n)+1)][(int) (Math.random()*(m)+1)] = 1;
-            }
-            for (int x = 0;x<n;x++){
-                for (int y = 0;y<m;y++){
-                if (mines[x+1][y+1] == 1){
-                        check++;
-                    }
-                }
-            }
-            if (check == nomines){
-                allmines = true;
-            }
-        }while (allmines == false);
-        for (int y = 0;y<m;y++){
-            for (int x = 0;x<n;x++){
-                if ((mines[x+1][y+1] == 0) || (mines[x+1][y+1] == 1)){
-                    perm[x][y] = perimcheck(x,y);
-                }
-                b[x][y] = new JButton("?");
-                b[x][y].addActionListener(this);
-                b[x][y].addMouseListener(this);
-                frame.add(b[x][y]);             //Los botone slos hemos tenido que añadir al frame
-                b[x][y].setEnabled(true);
-            }//end inner for
-        }//end for
-        frame.pack();       
-        frame.setVisible(true);
-        for (int y = 0;y<m+2;y++){
-            for (int x = 0;x<n+2;x++){
-                System.out.print(mines[x][y]);
-            }
-        System.out.println("");}
-        starttime = System.nanoTime();
-    }//end constructor Mine()
-
+    }
+    //Fin del constructor principal
+    
+    /*
+    Constructor creado para las partidas guardadas. Se deben de pasar todas las características 
+    de una partida para poder volver a retomarla
+    */
     public Buscaminas(int n, int m, int nomines, int contadormines, String i, String tmp, 
             boolean found, int row, int column, int contiempo, int[][] perm2, int[][] guesses2, 
-            int[][] mines2, JButton[][] b) {
+            int[][] mines2, JButton[][] b2) {
         
+        //Se inicializan todas las variables
         this.n=n;
         this.m=m;
         this.nomines=nomines;
@@ -411,17 +460,15 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
         this.perm=perm2;
         this.guesses=guesses2;
         this.mines=mines2;
-        this.b=b;
+        this.b=b2;
         
         tiempos = new ArrayList();
         nombres = new ArrayList();
-        frame= new JFrame();
-        
+
         contmines=nomines;
 
-        
-        //se asignan las características del frame y se añaden todos los componentes necesarios
-        //para que la pantalla tenga una amplia funcionalidad
+        //Inicialización del Frame con todas sus características y sus componentes
+        frame= new JFrame();
         frame.setLayout(new GridLayout(n,m));
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         menuBar = new JMenuBar();
@@ -430,26 +477,31 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
         options= new JMenu ("Options");
         menuBar.add(options);
         
+        //Opción de reinicio
         reiniciar= new JMenuItem("Reset");
         options.add(reiniciar);
-        reiniciar.addActionListener(new ActionListener() {  //Para reniciar 
+        reiniciar.addActionListener(new ActionListener() { 
             public void actionPerformed (ActionEvent e){
-                frame.dispose();                          //necesitamos que la pantalla actual se elimine
-                new Buscaminas(n,m,nomines,i);           //y se cree una nueva partida con las mismas características que la anterior
+                frame.dispose();                  //Elimina el Frame actual
+                new Buscaminas(n,m,nomines,i);    //Llama al contructor para iniciar una partida igual
             }
         });
         
-        //Creamos un label donde se van mostrando las minas que quedan por marcar
-        //posteriormente indicaremos que más instrucciones hemos añadido para que 
-        //esto tenga un buen funcionamiento
+        /*
+        Creamos un label donde se van mostrando las minas que quedan por marcar
+        posteriormente indicaremos que más instrucciones hemos añadido para que 
+        esto tenga un buen funcionamiento
+        */
         minas= new JLabel();
         minas.setForeground(Color.blue);
         menuBar.add(minas);
         minas.setText("Minas: "+contmines+" ");
         
-        //Creamos un label donde se va mostrando el tiempo de ejecución de la partida
-        //para ello se han añadido otras instrucciones más adelante del código que
-        //señalaremos
+        /*
+        Creamos un label donde se va mostrando el tiempo de ejecución de la partida
+        para ello se han añadido otras instrucciones más adelante del código que
+        señalaremos
+        */
         tiempo= new JLabel();
         tiempo.setForeground(Color.red);   
         menuBar.add (tiempo);
@@ -463,13 +515,45 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
             }
         };
         timer.schedule(t,0, 1000); //con esto se logra que el tiempo se muestre segundo a segundo 
+
+        //Le damos formato a la matriz de button para que sea igual que la incial
+        for (int y = 0;y<m;y++){
+            for (int x = 0;x<n;x++){
+                if (b[x][y].getText().equals("?")){
+                    b[x][y].setEnabled(true);
+                } else if ((b[x][y].getText().equals("x"))){
+                    b[x][y].setBackground(Color.orange);
+                    b[x][y].setEnabled(true);
+                } else {
+                    b[x][y].setEnabled(false);
+                }
+                
+                //Se dan funcionalidades a la matriz y se añade al Frame
+                b[x][y].addActionListener(this);
+                b[x][y].addMouseListener(this);
+                frame.add(b[x][y]);             
+            }
+        }
+        
+        //Ajustamos el Frame y lo hacemos visible
+        frame.pack();       
+        frame.setVisible(true);
+        
+        for (int y = 0;y<m+2;y++){
+            for (int x = 0;x<n+2;x++){
+                System.out.print(mines[x][y]);
+            }
+        System.out.println("");}
+        starttime = System.nanoTime();
+
         
         //Añadimos en el menú Options la opción de que el usuario guarde una partida
         guardarPartida = new JMenuItem("Guardar Partida");
         options.add(guardarPartida);
-        guardarPartida.addActionListener(new ActionListener() {  //Para guardar la partida 
-        public void actionPerformed (ActionEvent e){    //Se crea un fichero con las características de la partida actual
+        guardarPartida.addActionListener(new ActionListener() {  
+        public void actionPerformed (ActionEvent e){    
             try{
+                
                 //Volcamos las características de nuestra partida en el fichero
                 File archivo;
                 String ruta ="PartidaGuardada.txt";
@@ -477,6 +561,7 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                 archivo.createNewFile();
                 FileOutputStream fos= new FileOutputStream(archivo);
                 ObjectOutputStream oos = new ObjectOutputStream(fos);
+                
                 oos.writeInt(n);
                 oos.writeInt(m);
                 oos.writeInt(nomines);
@@ -491,11 +576,13 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                 oos.writeObject(guesses);
                 oos.writeObject(mines);
                 
-                /*for(int i == 0;i = b[j];i++){
-                    
+                //La matriz b debemos pasarla como String
+                for(int i = 0;i < n;i++){
+                    for (int j = 0; j < m; j++){
+                        oos.writeObject(b[i][j].getText());                
+                    }
                 }
-*/
-                oos.flush();
+ 
                 oos.close();
             } catch (IOException ex) {
                 Logger.getLogger(Buscaminas.class.getName()).log(Level.SEVERE, null, ex);
@@ -507,8 +594,8 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
         //Añadimos en el menú Options la opción de que el usuario cargue una partida
         cargarPartida = new JMenuItem("Cargar Partida");
         options.add(cargarPartida);
-        cargarPartida.addActionListener(new ActionListener() {  //Para cargar la partida 
-        public void actionPerformed (ActionEvent e){     //Se llama a un fichero con todas las características de la ultima partida
+        cargarPartida.addActionListener(new ActionListener() {   
+        public void actionPerformed (ActionEvent e){     
             frame.dispose();
             try{    
                 /*Leemos el archivo y vamos volcando las características de la anterior partida
@@ -534,20 +621,36 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                 int[][] perm = (int[][])ois.readObject();
                 int[][] guesses = (int[][])ois.readObject();
                 int[][] mines = (int[][])ois.readObject();
-                JButton[][] b = (JButton[][])ois.readObject();
                 
-                new Buscaminas(n, m, nomines, contmines, i, tmp, found, row, column, tiempom, perm, guesses, mines, b);
+                //Debemos recuperar la matriz b a partir de los String
+                
+               JButton[][] b = new JButton[n][m];
+               for(int k = 0;k < n;k++){
+                    for (int j = 0; j < m; j++){
+                        b[k][j] = new JButton((String)ois.readObject());
+                    }
+                }
+               
+               //Llamada a un nuevo constructor con todas las características modificables
+                new Buscaminas(n, m, nomines, contmines, i, tmp, found, row, column, tiempom,
+                    perm, guesses, mines, b);
+                
+                ois.close();
+                
+                
             } catch (IOException ex) {
                 Logger.getLogger(Buscaminas.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Buscaminas.class.getName()).log(Level.SEVERE, null, ex);
             }
+
         }
         });
 
-        //Añadimos más componentes al menú para hacer legubles los ficheros de las puntuaciones
-        //desde la propia aplicación
-        //Acontinuación explicaremos como hacemos para mostrar el fichero:
+        /*
+        Añadimos más componentes al menú para hacer legubles los ficheros de las puntuaciones
+        desde la propia aplicación
+        */
         tiemposM = new JMenu ("Mostrar tiempos");
         options.add(tiemposM);
         tiemposP = new JMenuItem ("Principiante");
@@ -556,23 +659,28 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
         tiemposM.add(tiemposI);
         tiemposE = new JMenuItem ("Experto");
         tiemposM.add(tiemposE);
-        //El fichero se tiene que mostrar cuando haces presión en cada una de las opciones
-        //Hemos creado tres ficheros: uno para cada caegoría
+        
+        /*
+        Métodos`para mostrar los mejores tiempos por pantalla
+        */
         tiemposP.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                try{    
-                    frame.dispose();//La pantalla anterior la cerramos
+                try{
+                    //Cerramos la pantalla anterior
+                    frame.dispose();
+                    
                     //Creamos una nueva ventana con las siguientes características:
                     framep= new JFrame ("Tiempos Principiante");
                     framep.setVisible(true);
                     framep.setSize(500,500);
-                  
                     framep.setLayout(new GridLayout(10,1));//10lineas y 1 columna
                     framep.setDefaultCloseOperation(EXIT_ON_CLOSE);
                 
-                    //Leemos el archivo e insertamos línea a línea a un JLabel para
-                    //que aparezca en la pantalla
+                    /*
+                    Leemos el archivo e insertamos línea a línea a un JLabel para
+                    que aparezca en la pantalla
+                    */
                     File archivo= new File("Principiante.txt");
                     archivo.createNewFile();
                     FileReader fr = new FileReader (archivo);
@@ -601,9 +709,7 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                   
                     framei.setLayout(new GridLayout(10,1));
                     framei.setDefaultCloseOperation(EXIT_ON_CLOSE);
-                
-                
-                
+                          
                     File archivo= new File("Intermedio.txt");
                     archivo.createNewFile();
                     FileReader fr = new FileReader (archivo);
@@ -633,8 +739,6 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                     framee.setLayout(new GridLayout(10,1));
                     framee.setDefaultCloseOperation(EXIT_ON_CLOSE);
                 
-                
-                
                     File archivo= new File("Experto.txt");
                     archivo.createNewFile();
                     FileReader fr = new FileReader (archivo);
@@ -651,73 +755,12 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
             }
             
         });
-        
-        
-        
-        perm = new int[n][m];
-        boolean allmines = false;
-        guesses = new int [n+2][m+2];
-        mines = new int[n+2][m+2];
-        b = new JButton [n][m];
-        
-        for (int y = 0;y<m+2;y++){
-            mines[0][y] = 3;
-            mines[n+1][y] = 3;
-            guesses[0][y] = 3;
-            guesses[n+1][y] = 3;
-        }
-        for (int x = 0;x<n+2;x++){
-            mines[x][0] = 3;
-            mines[x][m+1] = 3;
-            guesses[x][0] = 3;
-            guesses[x][m+1] = 3;
-        }
-        do {
-            int check = 0;
-            for (int y = 1;y<m+1;y++){
-                for (int x = 1;x<n+1;x++){
-                    mines[x][y] = 0;
-                    guesses[x][y] = 0;
-                }
-            }
-            for (int x = 0;x<nomines;x++){
-                mines [(int) (Math.random()*(n)+1)][(int) (Math.random()*(m)+1)] = 1;
-            }
-            for (int x = 0;x<n;x++){
-                for (int y = 0;y<m;y++){
-                if (mines[x+1][y+1] == 1){
-                        check++;
-                    }
-                }
-            }
-            if (check == nomines){
-                allmines = true;
-            }
-        }while (allmines == false);
-        for (int y = 0;y<m;y++){
-            for (int x = 0;x<n;x++){
-                if ((mines[x+1][y+1] == 0) || (mines[x+1][y+1] == 1)){
-                    perm[x][y] = perimcheck(x,y);
-                }
-                b[x][y] = new JButton("?");
-                b[x][y].addActionListener(this);
-                b[x][y].addMouseListener(this);
-                frame.add(b[x][y]);             //Los botone slos hemos tenido que añadir al frame
-                b[x][y].setEnabled(true);
-            }//end inner for
-        }//end for
-        frame.pack();       
-        frame.setVisible(true);
-        for (int y = 0;y<m+2;y++){
-            for (int x = 0;x<n+2;x++){
-                System.out.print(mines[x][y]);
-            }
-        System.out.println("");}
-        starttime = System.nanoTime();
-    }//end constructor Mine()
+     
+    }
+    
+    //Fin del segundo constructor
         
     
-
     public void actionPerformed(ActionEvent e){
         found =  false;
         JButton current = (JButton)e.getSource();
@@ -729,19 +772,21 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                 }
             }//end inner for
         }//end for
+        
+        //Caso en el que haya problema con aluno de los button
         if(!found) {
             System.out.println("didn't find the button, there was an error "); System.exit(-1);
         }
         Component temporaryLostComponent = null;
-        if (b[row][column].getBackground() == Color.orange){
+        
+        //Actuación del programa dependiendo del button que pulsemos
+        if (b[row][column].getBackground() == Color.orange){ //Ya marcada
             return;
-        }else if (mines[row+1][column+1] == 1){
-                timer.cancel();                         //Para que el tiempo se muestre correctamente
-                                                        //ha sido necesario cancelar el tiempo una vez se ha acabado la partida
-                                                        //ya que si no, seguía contando
+        }else if (mines[row+1][column+1] == 1){ //Pulsemos una mina, se para el tiempo
+                timer.cancel();            
                 JOptionPane.showMessageDialog(temporaryLostComponent, "You set off a Mine!!!!.");
                 System.exit(0);
-        } else {
+        } else { //Caso que no haya mina
             tmp = Integer.toString(perm[row][column]);
             if (perm[row][column] == 0){
                     tmp = " ";
@@ -764,6 +809,7 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
         }
     }
  
+    //Método que nos permite comprobar las minas marcadas
     public void checkifend() throws IOException{
         int check= 0;
         for (int y = 0; y<m;y++){
@@ -774,21 +820,24 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
             }
         }
         
+        //Caso en el que todas las minas hayan sido marcadas, acaba el juego
         if (check == nomines){
-            timer.cancel();         //Para que el tiempo se muestre correctamente
-                                    //ha sido necesario cancelar el tiempo una vez se ha acabado la partida
-                                    //ya que si no, seguía contando
+            timer.cancel();        
             endtime = System.nanoTime();
             Component temporaryLostComponent = null;
             int tiempoFinal =(int)((endtime-starttime)/1000000000);
             
-            //A continuación, cuando se ha ganado la partida si la categoría es Personalizado
-            //se muestra un mensaje con el tiempo que se ha tardado en conseguir ganar
+            /*
+            A continuación, cuando se ha ganado la partida si la categoría es Personalizado
+            se muestra un mensaje con el tiempo que se ha tardado en conseguir ganar
+            */
             if((i.equalsIgnoreCase("Personalizado"))){
                 JOptionPane.showMessageDialog(temporaryLostComponent, "Congratulations you won!!! It took you "+tiempoFinal+" seconds!");    
             }else{
-                //En el caso contrario, será Principiante, Intermedio o Avanzado por lo que
-                //secrean los ficheros que puedan permitir incluir el tiempo
+                /*
+                En el caso contrario, será Principiante, Intermedio o Avanzado por lo que
+                secrean los ficheros que puedan permitir incluir el tiempo, lo unico que varía es la ruta
+                */
                 File archivo;
                 if (i.equalsIgnoreCase("Principiante")){
                     String ruta ="Principiante.txt";
@@ -799,14 +848,15 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                     archivo = new File (ruta);
                     archivo.createNewFile();
                 }else {
-                    //if (i.equalsIgnoreCase("Avanzado")){
                     String ruta = "Avanzado.txt";  
                     archivo = new File (ruta);
                     archivo.createNewFile();
                 }
                     
-                //Primero, se lee el fichero entero y se introduce en tiempos todos los tiempos
-                //y en nombres los nombres ordenados de menor a mayor tiempo
+                    
+                /*
+                Leemos en primer lugar el fichero ya existente para poder comprobar los tiempos
+                */
                 FileReader fr = new FileReader (archivo);
                 BufferedReader br = new BufferedReader(fr);
                 String linea;
@@ -823,21 +873,25 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                 
                 int tamTiempos = tiempos.size();
                 
-                //1- El fichero esté vacio y no haya que comprobar si el tiempo se debe insertar
-                //en el fichero ya que, se insertará si o si
+                /*
+                1- El fichero esté vacio y no haya que comprobar si el tiempo se debe insertar
+                en el fichero ya que, se insertará si o si
+                */
                 if(tamTiempos==0){
                     String nombre = JOptionPane.showInputDialog(temporaryLostComponent, "Congratulations you won!!! It took you "
                         +tiempoFinal+" seconds!\n"+
                         "INSERT YOUR NAME IF YOU WANT TO SAVE YOUR SCORE\n"+"              IF NOT, PRESS CANCEL");
+                    //No se permite meter nombres con espacio, el ususario debe introducirlo de nuevo
                     while(nombre.contains(" ")){
                          nombre = JOptionPane.showInputDialog(temporaryLostComponent, "Congratulations you won!!! It took you "
                         +tiempoFinal+" seconds!\n"+
                         "INSERT YOUR NAME IF YOU WANT TO SAVE YOUR SCORE\n"+"              IF NOT, PRESS CANCEL--> SPACES ARE FORBIDDEN");
                         if(nombre==null){
                             break;
-                        }//Hemos introducido este while para asegurarnos de que el nombre que se introduzca
-                        //no tenga espacios, pues si no, no se separrá bien los nombres y tiempos como hemos indicado anteriormente
+                        }
                     }
+                    
+                    //Se procede a escribir el nombre y la puntuación en el fichero
                     if(nombre !=null){
                         FileWriter fw= new FileWriter(archivo);
                         BufferedWriter bw = new BufferedWriter(fw);
@@ -846,8 +900,11 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                         bw.flush();
                         bw.close();
                     }
-                //2-El fichero contenga tiempos pero no los suficientes par llegar a 10, con lo que
-                //solo comprobamos en qué posición debe ser insertado el nuevo tiempo 
+                    
+                /*
+                2-El fichero contenga tiempos pero no los suficientes para llegar a 10, con lo que
+                solo comprobamos en qué posición debe ser insertado el nuevo tiempo  
+                 */ 
                 }else if(tamTiempos <10){
                     String nombre = JOptionPane.showInputDialog(temporaryLostComponent, "Congratulations you won!!! It took you "
                         +tiempoFinal+" seconds!\n"+
@@ -860,6 +917,8 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                             break;
                         }
                     }
+                    
+                    //Comprobamos el tiempo respecto a los otros
                     if(nombre!=null){
                         int posicion=-1;
                         for(int i=0; i<tamTiempos; i++){
@@ -869,15 +928,18 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                             } 
                         }   
                         
+                        //Si es es el peor tiempo
                         if(posicion==-1){
                             nombres.add(nombre);
                             tiempos.add(tiempoFinal);
+                        
+                        //Si está en una posicion intermedia o primero
                         }else{
                             nombres.add(posicion, nombre);
                             tiempos.add(posicion, tiempoFinal);
                         }
                         
-
+                        //Se procede a escribir el nombre y el tiempo en el fichero
                         FileWriter fw= new FileWriter(archivo);
                         BufferedWriter bw = new BufferedWriter(fw);
                         for(int i=0; i<tiempos.size();i++){
@@ -886,8 +948,10 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                         bw.flush();
                         bw.close();
                     }
-                //3-En este caso, el fchero ya tiene 10 puntuaciones por lo que hay que ncontrar si la puntuacion
-                //última es mayor que la nueva puntuación y así saber que hay que introducirla
+                /*
+                3-En este caso, el fichero ya tiene 10 puntuaciones por lo que hay que encontrar si la puntuacion
+                última es mayor que la nueva puntuación y así saber que hay que introducirla
+                */                
                 }else if (tamTiempos==10){
                     if (tiempos.get(9)>tiempoFinal){
                         String nombre = JOptionPane.showInputDialog(temporaryLostComponent, "Congratulations you won!!! It took you "
@@ -902,19 +966,23 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                         }
                         }
                         if (nombre!=null){
-                            for(int i=0; i<tamTiempos; i++){ //Se averigua en qué posición hay que insertarla
+                            //Se averigua en qué posición hay que insertarla
+                            for(int i=0; i<tamTiempos; i++){ 
                                 if ((tiempoFinal < tiempos.get(i))){
                                     nombres.add(i, nombre);
                                     tiempos.add(i, tiempoFinal);
                                     break;
                                 }
                             }
-
-                            //Se elimina la ultima posición que será en la que se encontrará el mayor valor
-                            //para controlar que solo haya 10 tiempos guardados en cada fichero
+                            
+                            /*
+                            Se elimina la ultima posición que será en la que se encontrará el mayor valor
+                            para controlar que solo haya 10 tiempos guardados en cada fichero
+                            */
                             tiempos.remove(10);
                             nombres.remove(10);
                             
+                            //Se procede a escribir el nombre y el tiempo en el fichero
                             FileWriter fw= new FileWriter(archivo);
                             BufferedWriter bw = new BufferedWriter(fw);
                             for(int i=0; i<tiempos.size();i++){
@@ -925,6 +993,7 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                         }
                     }
                 }else{     
+                    
                 //4-En cualquier otro caso no se deja guardar el tiempo y se muestra el mensaje de enhorabuena
                     JOptionPane.showMessageDialog(temporaryLostComponent, "Congratulations you won!!! It took you "
                             +tiempoFinal+" seconds!"); 
@@ -932,7 +1001,7 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
             }
         }
     }
-
+    //Metodo que permite conocer lo que hay alrededor del button señalado
     public void scan(int x, int y){
         for (int a = 0;a<8;a++) {
             if (mines[x+1+deltax[a]][y+1+deltay[a]] == 3){
@@ -951,6 +1020,7 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
         }
     }
  
+    //Comprobación de las minas que hay alrededor
     public int perimcheck(int a, int y){
         int minecount = 0;
         for (int x = 0;x<8;x++){
@@ -966,12 +1036,14 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
     }
  
     public static void main(String[] args){
-        //En el programa principal llamamosal frame creado PantallaInicio
-        //se explica su funcionalidad en el archivo correspondiente
+        /*
+        En el programa principal llamamosal frame creado PantallaInicio
+        se explica su funcionalidad en el archivo correspondiente
+        */
         PantallaInicio pi;
         pi= new PantallaInicio();
         pi.setVisible(true);
-        //new Buscaminas();
+
     }
  
     public void mouseClicked(MouseEvent e) {
