@@ -92,7 +92,8 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
         reiniciar.addActionListener(new ActionListener() {  //Para reniciar 
             public void actionPerformed (ActionEvent e){
                 frame.dispose();                          //necesitamos que la pantalla actual se elimine
-                new Buscaminas(n,m,nomines,i);           //y se cree una nueva partida con las mismas características que la anterior
+                new Buscaminas(n,m,nomines,i);           //y se cree una nueva partida con las mismas características 
+                                                        //que la anterior
             }
         });
         
