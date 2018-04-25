@@ -120,11 +120,12 @@ public class PantallaInicio extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        //Declaramos las variables
         int n;
         int m;
         int mines;
 
-        //obtener dato del combo
+        //Obtener dato del combo
         String i = jComboBox1.getSelectedItem().toString();
         if(i.equals("Principiante")){
             n=10;
@@ -140,11 +141,12 @@ public class PantallaInicio extends javax.swing.JFrame {
             this.setVisible(false);
         }else if (i.equals("Experto")){
             n=32;
-            m=16;
+            m=32;
             mines=99;
             new Buscaminas (m,n,mines,i);
             this.setVisible(false);
         }else {
+            //Llamado a la clase personalizado
             this.setVisible(false);
             Personalizado p = new Personalizado();
             p.setVisible(true);
