@@ -1,0 +1,10 @@
+Moi11 34
+Moi10 38
+Moi2 43
+Moi4 43
+Moi7 49
+Moi5 57
+Moi8 62
+Moi1 74
+Moi3 87
+Moi9 110

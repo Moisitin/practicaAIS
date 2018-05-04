@@ -178,7 +178,7 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
         tiempo= new JLabel();
         tiempo.setForeground(Color.red);   
         menuBar.add (tiempo);
-        tiempo.setText(" Tiempo: "+tiempom);
+        tiempo.setText(" Time: "+tiempom);
         timer = new Timer();
         t= new TimerTask() {
             @Override
@@ -421,7 +421,7 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                     Leemos el archivo e insertamos línea a línea a un JLabel para
                     que aparezca en la pantalla
                     */
-                    File archivo= new File("Principiante.txt");
+                    File archivo= new File("Beginner.txt");
                     archivo.createNewFile();
                     FileReader fr = new FileReader (archivo);
                     BufferedReader br = new BufferedReader(fr);
@@ -457,7 +457,7 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                     framei.setLayout(new GridLayout(10,1));
                     framei.setDefaultCloseOperation(EXIT_ON_CLOSE);
                           
-                    File archivo= new File("Intermedio.txt");
+                    File archivo= new File("Intermediate.txt");
                     archivo.createNewFile();
                     FileReader fr = new FileReader (archivo);
                     BufferedReader br = new BufferedReader(fr);
@@ -493,7 +493,7 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                     framee.setLayout(new GridLayout(10,1));
                     framee.setDefaultCloseOperation(EXIT_ON_CLOSE);
                 
-                    File archivo= new File("Experto.txt");
+                    File archivo= new File("Expert.txt");
                     archivo.createNewFile();
                     FileReader fr = new FileReader (archivo);
                     BufferedReader br = new BufferedReader(fr);
@@ -798,7 +798,7 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                     Leemos el archivo e insertamos línea a línea a un JLabel para
                     que aparezca en la pantalla
                     */
-                    File archivo= new File("Principiante.txt");
+                    File archivo= new File("Beginner.txt");
                     archivo.createNewFile();
                     FileReader fr = new FileReader (archivo);
                     BufferedReader br = new BufferedReader(fr);
@@ -834,7 +834,7 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                     framei.setLayout(new GridLayout(10,1));
                     framei.setDefaultCloseOperation(EXIT_ON_CLOSE);
                           
-                    File archivo= new File("Intermedio.txt");
+                    File archivo= new File("Intermediate.txt");
                     archivo.createNewFile();
                     FileReader fr = new FileReader (archivo);
                     BufferedReader br = new BufferedReader(fr);
@@ -870,7 +870,7 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                     framee.setLayout(new GridLayout(10,1));
                     framee.setDefaultCloseOperation(EXIT_ON_CLOSE);
                 
-                    File archivo= new File("Experto.txt");
+                    File archivo= new File("Expert.txt");
                     archivo.createNewFile();
                     FileReader fr = new FileReader (archivo);
                     BufferedReader br = new BufferedReader(fr);
@@ -969,7 +969,7 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
             A continuación, cuando se ha ganado la partida si la categoría es Personalizado
             se muestra un mensaje con el tiempo que se ha tardado en conseguir ganar
             */
-            if((i.equalsIgnoreCase("Personalizado"))){
+            if((i.equalsIgnoreCase("Customized"))){
                 JOptionPane.showMessageDialog(temporaryLostComponent, "Congratulations you won!!! It took you "+tiempoFinal+" seconds!");    
             }else{
                 /*
@@ -977,16 +977,16 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                 secrean los ficheros que puedan permitir incluir el tiempo, lo unico que varía es la ruta
                 */
                 File archivo;
-                if (i.equalsIgnoreCase("Principiante")){
-                    String ruta ="Principiante.txt";
+                if (i.equalsIgnoreCase("Beginner")){
+                    String ruta ="Beginner.txt";
                     archivo = new File (ruta);
                     archivo.createNewFile();
-                }else if (i.equalsIgnoreCase("Intermedio")){
-                    String ruta = "Intermedio.txt";  
+                }else if (i.equalsIgnoreCase("Intermediate")){
+                    String ruta = "Intermediate.txt";  
                     archivo = new File (ruta);
                     archivo.createNewFile();
                 }else {
-                    String ruta = "Avanzado.txt";  
+                    String ruta = "Expert.txt";  
                     archivo = new File (ruta);
                     archivo.createNewFile();
                 }
@@ -1033,7 +1033,6 @@ public class Buscaminas extends JFrame implements ActionListener, MouseListener{
                     if(nombre !=null){
                         FileWriter fw= new FileWriter(archivo);
                         BufferedWriter bw = new BufferedWriter(fw);
-                        bw.newLine();
                         bw.write(nombre+" "+tiempoFinal+System.getProperty("line.separator"));
                         bw.flush();
                         bw.close();
